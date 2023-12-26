@@ -1,0 +1,8 @@
+# .gitignore
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+.env
+ticketing_orig.py
