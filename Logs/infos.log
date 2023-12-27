@@ -1,26 +1,4 @@
-WARNING    - 2023-12-27 01:38:55,348 - client          : PyNaCl is not installed, voice will NOT be supported
-INFO       - 2023-12-27 01:38:55,350 - client          : logging in using static token
-INFO       - 2023-12-27 01:38:56,207 - gateway         : Shard ID None has connected to Gateway (Session ID: f601de18c37846101e60b69c256c310c).
-INFO       - 2023-12-27 01:38:58,208 - main            : User: ScalBot3.0#7689 (ID: 1188150057954967662)
-ERROR      - 2023-12-27 01:39:34,067 - client          : Ignoring exception in on_ready
-Traceback (most recent call last):
-  File "C:\Users\Jesse\Documents\Coding Projects\ScalBot 3.0\.venv\Lib\site-packages\discord\client.py", line 441, in _run_event
-    await coro(*args, **kwargs)
-  File "c:\Users\Jesse\Documents\Coding Projects\ScalBot 3.0\main.py", line 57, in on_ready
-    await load_users() # Load users from JSON file
-    ^^^^^^^^^^^^^^^^^^
-  File "c:\Users\Jesse\Documents\Coding Projects\ScalBot 3.0\save.py", line 13, in load_users
-    users = json.load(f)
-            ^^^^^^^^^^^^
-  File "C:\Users\Jesse\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py", line 293, in load
-    return loads(fp.read(),
-           ^^^^^^^^^^^^^^^^
-  File "C:\Users\Jesse\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py", line 346, in loads
-    return _default_decoder.decode(s)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Jesse\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Jesse\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+WARNING    - 2023-12-27 16:14:53,959 - client          : PyNaCl is not installed, voice will NOT be supported
+INFO       - 2023-12-27 16:14:53,960 - client          : logging in using static token
+INFO       - 2023-12-27 16:14:54,609 - gateway         : Shard ID None has connected to Gateway (Session ID: fced0c80be0d8e840dffceae14d2f698).
+INFO       - 2023-12-27 16:14:56,639 - main            : User: ScalBot3.0#7689 (ID: 1188150057954967662)

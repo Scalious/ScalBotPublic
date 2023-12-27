@@ -9,12 +9,15 @@ from cogs.math import Math
 from cogs.antispam import Antispam
 from cogs.ticketing import Ticketing
 from cogs.leveling import LevelingCog
-from cogs.users import Users
+from cogs.member_function import UserHandler
+#from cogs.users import Users
 
 from discord.ui import Button, View
 from discord import app_commands
 
 from datetime import timedelta
+
+#from cogs.member_function import save_users, load_users
 
 logger = settings.logging.getLogger("bot")
   
@@ -24,7 +27,7 @@ def run(): # Define a function to run the bot
     intents.message_content = True # Temporary Enables message_content Intents
     intents.members = True # Temporary Enables members Intents
 
-    bot = commands.Bot(command_prefix=".", intents=intents)    # Create a new bot instance 
+    bot = commands.Bot(command_prefix=".", intents=intents)    # Create a new bot instance
 
     # Creates a Open a Ticket apps command
     @bot.tree.context_menu(name = "Open a Ticket", guild = settings.GUILDS_ID)
@@ -44,6 +47,11 @@ def run(): # Define a function to run the bot
         view.add_item(Button(style=discord.ButtonStyle.primary, label="Transcript", custom_id="transcript"))
         await channel.send(f'Ticket channel created for {message.author.mention}.', view=view)
         await interaction.followup.send('Ticket created.')
+
+    @bot.event
+    async def on_disconnect():
+        logger.info("Disconnected from Discord")
+        await bot.user_handler.save_users() #  Save users to file
   
     @bot.event # Event to run when the bot is ready
     async def on_ready(): # Define a function to run when the bot is ready
@@ -53,6 +61,9 @@ def run(): # Define a function to run the bot
         bot.tree.copy_global_to(guild=settings.GUILDS_ID)  # Copy global commands to guild
         await bot.tree.sync(guild=settings.GUILDS_ID) # Sync commands to guild
 
+        bot.user_handler = UserHandler(bot)  # Create a new UserHandler instance and add it as an attribute to the bot
+        await bot.user_handler.load_users()  # Load users from file
+        
         # for cmd_file in settings.CMDS_DIR.glob("*.py"): # Load all commands in the commands folder
         #     if cmd_file.name != "__init__.py":
         #         await bot.load_extension(f"commands.{cmd_file.name[:-3]}")
