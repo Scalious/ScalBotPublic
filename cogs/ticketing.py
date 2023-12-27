@@ -10,12 +10,12 @@ class Ticketing(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Alernative method to call the command using .ticket
+    # Alernative method to call the command using .ticket as a command
 
     # @commands.command()
     # @commands.has_permissions(manage_channels=True)
     # async def ticket(self, ctx):
-    #     admin_id = 787747360398770176
+    #     admin_id = #put admin role id here
     #     admin_role = discord.utils.get(ctx.guild.roles, id=admin_id)
     #     overwrites = {
     #         ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),

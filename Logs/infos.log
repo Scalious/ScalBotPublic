@@ -1,4 +1,4 @@
-WARNING    - 2023-12-27 16:14:53,959 - client          : PyNaCl is not installed, voice will NOT be supported
-INFO       - 2023-12-27 16:14:53,960 - client          : logging in using static token
-INFO       - 2023-12-27 16:14:54,609 - gateway         : Shard ID None has connected to Gateway (Session ID: fced0c80be0d8e840dffceae14d2f698).
-INFO       - 2023-12-27 16:14:56,639 - main            : User: ScalBot3.0#7689 (ID: 1188150057954967662)
+WARNING    - 2023-12-27 17:10:41,598 - client          : PyNaCl is not installed, voice will NOT be supported
+INFO       - 2023-12-27 17:10:41,600 - client          : logging in using static token
+INFO       - 2023-12-27 17:10:42,381 - gateway         : Shard ID None has connected to Gateway (Session ID: b2a2b501de528d7798e3aa7286b531d5).
+INFO       - 2023-12-27 17:10:44,384 - main            : User: ScalBot3.0#7689 (ID: 1188150057954967662)
