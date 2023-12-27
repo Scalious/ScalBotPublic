@@ -29,7 +29,7 @@ class Ticketing(commands.Cog):
     #     view.add_item(Button(style=discord.ButtonStyle.primary, label="Transcript", custom_id="transcript"))
     #     await channel.send(f'Ticket channel created for {ctx.author.mention}.', view=view)
 
-    # Listener to control the ticket button interaction
+    # Listener to control button interactions
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
         if interaction.type == InteractionType.component:

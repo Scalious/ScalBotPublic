@@ -9,6 +9,7 @@ from cogs.math import Math
 from cogs.antispam import Antispam
 from cogs.ticketing import Ticketing
 from cogs.leveling import LevelingCog
+from cogs.users import Users
 
 from discord.ui import Button, View
 from discord import app_commands
@@ -25,6 +26,7 @@ def run(): # Define a function to run the bot
 
     bot = commands.Bot(command_prefix=".", intents=intents)    # Create a new bot instance 
 
+    # Creates a Open a Ticket apps command
     @bot.tree.context_menu(name = "Open a Ticket", guild = settings.GUILDS_ID)
     @app_commands.checks.cooldown(2, 3600, key = lambda i: (i.guild_id, i.user.id))
     async def open_ticket(interaction: discord.Interaction, message: discord.Message):
@@ -50,19 +52,10 @@ def run(): # Define a function to run the bot
 
         bot.tree.copy_global_to(guild=settings.GUILDS_ID)  # Copy global commands to guild
         await bot.tree.sync(guild=settings.GUILDS_ID) # Sync commands to guild
-               
+
         # for cmd_file in settings.CMDS_DIR.glob("*.py"): # Load all commands in the commands folder
         #     if cmd_file.name != "__init__.py":
         #         await bot.load_extension(f"commands.{cmd_file.name[:-3]}")
-        
-        # await bot.add_cog(Greetings(bot))   
-        # await bot.add_cog(Ping(bot))
-        # await bot.add_cog(Roll(bot))
-        # await bot.add_cog(Joined(bot))
-        # await bot.add_cog(Slap(bot))
-        # await bot.add_cog(Math(bot))
-        # await bot.add_cog(Antispam(bot))
-        # await bot.add_cog(Ticketing(bot))
 
         for cog_file in settings.COGS_DIR.glob("*.py"): # Load all cogs in the cogs folder
             if cog_file.name != "__init__.py":
