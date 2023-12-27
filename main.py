@@ -8,6 +8,7 @@ from cogs.slap import Slap
 from cogs.math import Math
 from cogs.antispam import Antispam
 from cogs.ticketing import Ticketing
+from cogs.leveling import LevelingCog
 
 from discord.ui import Button, View
 from discord import app_commands
@@ -23,14 +24,6 @@ def run(): # Define a function to run the bot
     intents.members = True # Temporary Enables members Intents
 
     bot = commands.Bot(command_prefix=".", intents=intents)    # Create a new bot instance 
-    
-    class NotOwner(commands.CheckFailure):
-        def is_owner():
-            async def predicate(ctx):
-                if ctx.author.id != ctx.guild.owner_id:
-                    raise NotOwner("Hey you are not the owner")
-                return True
-            return commands.check(predicate) 
 
     @bot.tree.context_menu(name = "Open a Ticket", guild = settings.GUILDS_ID)
     @app_commands.checks.cooldown(2, 3600, key = lambda i: (i.guild_id, i.user.id))
@@ -77,25 +70,42 @@ def run(): # Define a function to run the bot
                                         
         print(f'We have logged in as {bot.user}')   # Prints the bot's username and identifier
 
+    # Custom Check for Admin Commands
+        # I want to separate this into a separate file, but I'm not sure how to do that yet.    
+    class NotOwner(commands.CheckFailure):
+        pass
+
+    def is_owner():
+        async def predicate(ctx):
+            admin_role_id = 787747360398770176
+            if admin_role_id in [role.id for role in ctx.author.roles]:
+                return True
+            else:
+                raise commands.CommandError("Permission Denied.")
+        return commands.check(predicate) 
+
     # Admin Commands 
 
     @bot.command(hidden=True)
+    @is_owner()
     async def load(ctx, cog:str):
         logger.info(f"Loading {cog}...")
         await bot.load_extension(f"cogs.{cog.lower()}") # Load a cog
 
     @bot.command(hidden=True)
+    @is_owner()
     async def unload(ctx, cog:str):
         logger.info(f"Unloading {cog}...")
         await bot.unload_extension(f"cogs.{cog.lower()}") # Unload a cog
 
     @bot.command(hidden=True)
+    @is_owner()
     async def reload(ctx, cog:str):
         logger.info(f"Reloading {cog}...")
         await bot.reload_extension(f"cogs.{cog.lower()}") # Reload a cog
 
-    # Error Handling   
-
+    # Error Handling     
+        # This could be a listener instead of an event, but I'm not sure how to do that yet.
     @bot.event
     async def on_command_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
@@ -107,24 +117,6 @@ def run(): # Define a function to run the bot
         elif isinstance(error, commands.CommandError):
             logger.error(f'CommandError in command {ctx.command}: {error}')
             await ctx.send(f'Error: {error}')
-
-    @load.error # Error handling for the load command
-    async def load_error(ctx, error):
-        if isinstance(error, NotOwner):
-            logger.error(f'NotOwner in command {ctx.command}: {error}')
-            await ctx.send("Permission Denied.")
-
-    @unload.error # Error handling for the unload command
-    async def unload_error(ctx, error):
-        if isinstance(error, NotOwner):
-            logger.error(f'NotOwner in command {ctx.command}: {error}')
-            await ctx.send("Permission Denied.")
-
-    @reload.error # Error handling for the reload command
-    async def reload_error(ctx, error):
-        if isinstance(error, NotOwner):
-            logger.error(f'NotOwner in command {ctx.command}: {error}')
-            await ctx.send("Permission Denied.")
     
     bot.run(settings.TOKEN)  # Run the bot with your token
 

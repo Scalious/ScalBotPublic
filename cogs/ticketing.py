@@ -4,6 +4,8 @@ from discord.ext import commands
 from discord import InteractionType, utils
 from datetime import datetime
 
+from discord.utils import get
+
 class Ticketing(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -31,6 +33,20 @@ class Ticketing(commands.Cog):
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
         if interaction.type == InteractionType.component:
+            if interaction.data["custom_id"] == "accept_rules":
+                await interaction.response.defer()
+                member = interaction.user
+                new_member_role = get(interaction.guild.roles, id=1189245504912113664)  # New Member role ID
+                guest_role = get(interaction.guild.roles, id=1189255069082853527)  # Guest role ID
+                await member.add_roles(new_member_role)
+                await member.remove_roles(guest_role)
+            if interaction.data["custom_id"] == "decline_rules":
+                await interaction.response.defer()
+                member = interaction.user
+                guest_role = get(interaction.guild.roles, id=1189255069082853527)  # Guest role ID
+                new_member_role = get(interaction.guild.roles, id=1189245504912113664)  # New Member role ID
+                await member.add_roles(guest_role)
+                await member.remove_roles(new_member_role)
             if interaction.data["custom_id"] == "close_ticket":
                 if 'ticket-' in interaction.channel.name and interaction.user.guild_permissions.manage_channels:
                     await interaction.channel.delete()
