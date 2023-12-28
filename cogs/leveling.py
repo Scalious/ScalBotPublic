@@ -115,7 +115,7 @@ class LevelingCog(commands.Cog):
         # Check if the reaction is added in the specific channel you want to listen to
         if reaction.message.channel.id == 1189280239432519824 or reaction.message.channel.id == 986395646632296548:
             if user.id in self.user_handler._users:
-                self.user_handler._users[user.id]['points'] += 300
+                self.user_handler._users[user.id]['points'] += 3
                 await self.user_handler.save_users()
             else:
                 #await mf.add_member(user.id, user.name, 300)
@@ -127,7 +127,7 @@ class LevelingCog(commands.Cog):
         # Check if the reaction is added in the specific channel you want to listen to
         if reaction.message.channel.id == 1189280239432519824 or reaction.message.channel.id == 986395646632296548:
             if user.id in self.user_handler._users:
-                self.user_handler._users[user.id]['points'] -= 300
+                self.user_handler._users[user.id]['points'] -= 3
                 await self.user_handler.save_users()
             else:
                 #await mf.add_member(user.id, user.name, 300)

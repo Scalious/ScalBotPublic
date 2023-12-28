@@ -6,7 +6,7 @@ from discord.ext import commands
 import asyncio
 
 thresholds = [
-    {'threshold': 5, 'role_id': "1189245504912113664"},  # New Member
+    {'threshold': 1, 'role_id': "1189245504912113664"},  # New Member
     {'threshold': 10, 'role_id': "1189244962940911698"},  # Member
     {'threshold': 200, 'role_id': "1189311831412588644"},  # Super Member
 ]
