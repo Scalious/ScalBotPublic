@@ -1,4 +1,4 @@
-import discord
+import discord, settings
 from discord.ext import commands
 
 from discord.ext import tasks
@@ -27,10 +27,10 @@ class LevelingCog(commands.Cog):
     # Add roles if they pass a new threshold
     @tasks.loop(minutes=0.50)  # Run this task every 30 seconds
     async def add_roles(self):
-        guild = self.bot.get_guild(787746412820824074)  # Replace with your guild ID
+        guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
         for member in guild.members: # Loop through all members in the guild
             if member.id not in self.user_handler._users: # If the user is not in the dictionary
-                await self.user_handler.add_member(member.id, member.display_name, 0) # Add the user to the dictionary
+                await self.user_handler.add_member(member.id, member.display_name, 1) # Add the user to the dictionary
             users = self.user_handler.get_users()
             if member.id in users:  # Check if the user is in the dictionary
                 points = users[member.id]['points']  # Get the user's points from the dictionary
@@ -46,7 +46,7 @@ class LevelingCog(commands.Cog):
     # Remove roles if they exceed the threshold
     @tasks.loop(minutes=0.50)  # Run this task every 30 seconds
     async def remove_roles_exceed(self):
-        guild = self.bot.get_guild(787746412820824074)  # Replace with your guild ID
+        guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
         for member in guild.members:
             users = self.user_handler.get_users()
             if member.id in users:
@@ -63,7 +63,7 @@ class LevelingCog(commands.Cog):
     # Remove roles if they previously had a higher threshold
     @tasks.loop(minutes=0.50)  # Run this task every 30 seconds
     async def remove_roles(self):
-        guild = self.bot.get_guild(787746412820824074)  # Replace with your guild ID
+        guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
         for member in guild.members:
             users = self.user_handler.get_users()
             if member.id in users:
@@ -104,13 +104,13 @@ class LevelingCog(commands.Cog):
     async def on_message(self, message):
         if type(message.channel) is not discord.TextChannel or message.author.bot: return  # ignore DMs and bots
         # Check if the message is sent in the specific channel you want to listen to
-        if message.channel.id == 1189280239432519824 or message.channel.id == 986395646632296548:
+        if message.channel.id == settings.Learning_ID.id or message.channel.id == settings.Learning2_ID.id:
             if message.author.id in self.user_handler._users:
                 self.user_handler._users[message.author.id]['points'] += 1
                 self.update_counter += 1
                 if self.update_counter == 5: 
                     await self.user_handler.save_users()
-                    self.update_counter = 0
+                    self.update_counter = 0 
             else:
                 #await mf.add_member(message.author.id, message.author.name, 1)
                 pass
@@ -119,7 +119,7 @@ class LevelingCog(commands.Cog):
     async def on_reaction_add(self, reaction, user):
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
         # Check if the reaction is added in the specific channel you want to listen to
-        if reaction.message.channel.id == 1189280239432519824 or reaction.message.channel.id == 986395646632296548:
+        if reaction.message.channel.id == settings.Learning_ID.id or reaction.message.channel.id == settings.Learning2_ID.id:
             if user.id in self.user_handler._users:
                 self.user_handler._users[user.id]['points'] += 3
                 await self.user_handler.save_users()
@@ -131,7 +131,7 @@ class LevelingCog(commands.Cog):
     async def on_reaction_remove(self, reaction, user):
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
         # Check if the reaction is added in the specific channel you want to listen to
-        if reaction.message.channel.id == 1189280239432519824 or reaction.message.channel.id == 986395646632296548:
+        if reaction.message.channel.id == settings.Learning_ID.id or reaction.message.channel.id == settings.Learning2_ID.id:
             if user.id in self.user_handler._users:
                 self.user_handler._users[user.id]['points'] -= 3
                 await self.user_handler.save_users()

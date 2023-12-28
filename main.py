@@ -26,15 +26,15 @@ def run(): # Define a function to run the bot
 
     bot = commands.Bot(command_prefix=".", intents=intents)    # Create a new bot instance
 
-    # Creates a Open a Ticket apps command
+    # Creates a Open a Ticket apps command - commented out the target user for now
     @bot.tree.context_menu(name = "Open a Ticket", guild = settings.GUILDS_ID)
     @app_commands.checks.cooldown(2, 3600, key = lambda i: (i.guild_id, i.user.id)) # 2 uses per hour per user
     async def open_ticket(interaction: discord.Interaction, message: discord.Message):
         await interaction.response.defer()
-        admin_role = discord.utils.get(message.guild.roles, id=787747360398770176)
+        admin_role = discord.utils.get(message.guild.roles, id=settings.ADMIN_ID.id)
         overwrites = {
             message.guild.default_role: discord.PermissionOverwrite(read_messages=False), # Deny everyone to see the channel
-            message.author: discord.PermissionOverwrite(read_messages=True), # Allow the author to see the channel
+            #message.author: discord.PermissionOverwrite(read_messages=True), # Allow the author to see the channel
             bot.user: discord.PermissionOverwrite(read_messages=True), # Allow the bot to see the channel
             admin_role: discord.PermissionOverwrite(read_messages=True) # Allow the admin role to see the channel
         }
@@ -76,7 +76,7 @@ def run(): # Define a function to run the bot
 
     def is_owner():
         async def predicate(ctx):
-            admin_role_id = 787747360398770176
+            admin_role_id = settings.ADMIN_ID.id
             if admin_role_id in [role.id for role in ctx.author.roles]:
                 return True
             else:

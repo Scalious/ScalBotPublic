@@ -1,14 +1,16 @@
 import discord
 import json
+import settings
 
 from discord.ext import commands
 
 import asyncio
 
 thresholds = [
-    {'threshold': 1, 'role_id': "1189245504912113664"},  # New Member
-    {'threshold': 10, 'role_id': "1189244962940911698"},  # Member
-    {'threshold': 200, 'role_id': "1189311831412588644"},  # Super Member
+    #{'threshold': 0, 'role_id': settings.Guest_ID.id},  # Guest
+    {'threshold': 1, 'role_id': settings.New_Member_ID.id},  # New Member
+    {'threshold': 10, 'role_id': settings.Member_ID.id},  # Member
+    {'threshold': 200, 'role_id': settings.Super_Member_ID.id},  # Super Member
 ]
 
 class UserHandler(commands.Cog):
@@ -58,11 +60,6 @@ class UserHandler(commands.Cog):
             print("Error: Permission denied when trying to read 'users.txt'.")
         except json.JSONDecodeError:
             print("Error: 'users.txt' contains invalid JSON.")
-
-# async def setup(bot):
-#     user_handler = UserHandler(bot)
-#     await user_handler.load_users()
-#     await bot.add_cog(UserHandler(bot))
 
 async def setup(bot):
     bot.user_handler = UserHandler(bot)  # Create a new UserHandler instance and add it as an attribute to the bot

@@ -26,7 +26,7 @@ class Greetings(commands.Cog):
 
     def is_owner():
         async def predicate(ctx):
-            admin_role_id = 787747360398770176
+            admin_role_id = settings.ADMIN_ID.id
             if admin_role_id in [role.id for role in ctx.author.roles]:
                 return True
             else:
@@ -41,7 +41,7 @@ class Greetings(commands.Cog):
     @is_owner()
     async def rules(self, ctx):
         # Get the channel
-        channel = self.bot.get_channel(959111607068274789)  # Replace with your channel ID
+        channel = self.bot.get_channel(settings.Rules_ID.id)  # Replace with your channel ID
         # Purge the channel
         await channel.purge()
         # Get the message
@@ -59,13 +59,13 @@ class Greetings(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         # Replace 'your-channel-id' with the ID of your channel
-        if message.channel.id == 986433466650468403:
+        if message.channel.id == settings.Welcome_ID.id:
             await message.add_reaction("👋")
         
     @commands.Cog.listener()
-    async def on_member_join(self, message, member):
+    async def on_member_join(self, member):
         # Get the channel where you want to send the message
-        channel = message.channel.id == 986433466650468403
+        channel = self.bot.get_channel(settings.Welcome_ID.id)
         # Send a message to the channel
         await channel.send(f"Welcome to the server, {member.mention}!")
 

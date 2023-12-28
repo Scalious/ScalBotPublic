@@ -16,8 +16,17 @@ BASE_DIR = pathlib.Path(__file__).parent
 CMDS_DIR = BASE_DIR / "commands"
 COGS_DIR = BASE_DIR / "cogs"
 
+# these are hard coded as part of the .env file
 GUILDS_ID = discord.Object(id=int(os.getenv("GUILD")))
-ADMIN_ID = discord.Object(id=int(os.getenv("ADMIN")))
+ADMIN_ID = discord.Object(id=int(os.getenv("Admin")))
+Guest_ID = discord.Object(id=int(os.getenv("Guest")))
+New_Member_ID = discord.Object(id=int(os.getenv("New_Member")))
+Member_ID = discord.Object(id=int(os.getenv("Member")))
+Super_Member_ID = discord.Object(id=int(os.getenv("Super_Member")))
+Learning_ID = discord.Object(id=int(os.getenv("Learning_Channel")))
+Learning2_ID = discord.Object(id=int(os.getenv("Learning_Channel2")))
+Rules_ID = discord.Object(id=int(os.getenv("Rules")))
+Welcome_ID = discord.Object(id=int(os.getenv("Welcome")))
 
 LOGGING_CONFIG = {
     "version": 1,
