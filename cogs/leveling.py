@@ -79,14 +79,20 @@ class LevelingCog(commands.Cog):
 
     # Test Commands
 
-    @commands.command()
+    @commands.command(
+        enabled=True, #enableds/disables the command
+        hidden=False #hides the command description
+    )
     async def print_users(self, ctx):
         await self.add_roles()
         users = self.user_handler.get_users()
         print(f'User ID: {ctx.author.id}, Points: {users[ctx.author.id]["points"]}')
         await ctx.send(f'Users: {users}')
  
-    @commands.command()
+    @commands.command(
+        enabled=True, #enableds/disables the command
+        hidden=False #hides the command description
+    )
     async def purge_channel(self, ctx):
         channel = ctx.channel
         await channel.purge()
