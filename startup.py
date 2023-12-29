@@ -30,13 +30,14 @@ async def on_ready():
             for channel in guild.channels:
                 f.write(f"{channel.name.replace(' ', '_').replace('-', '_')}_ID = discord.Object(id=int(os.getenv('{channel.name.replace(' ', '_').replace('-', '_')}')))\n\n")
             
-        # creates the thresholds.py file - not currently used set manually in member_function.py
+        # creates the thresholds.py file
         with open('thresholds.py', 'a') as f:
             non_linear_list = [i**4 for i in range(len(guild.roles))]
-            thresholds = [{'threshold': i, 'role_id': role.id} for i, role in zip(non_linear_list, guild.roles)]
+            # Generates a formated thresholds.txt file ignoring @everyone the 4 reaction roles and the last 2 roles (admin/bot)
+            thresholds = [{'threshold': i, 'role_id': role.id} for i, role in zip(non_linear_list, guild.roles[5:-2])]
             f.write("thresholds = [\n\n")      
             for threshold in thresholds:
-                f.write(f"     {threshold},\n")
+                f.write(f"     {threshold}, # {guild.get_role(threshold['role_id'])}\n")
             f.write("\n]\n\n")
     else:
         print("Setup has already been complete. You may now run the main.py file.")

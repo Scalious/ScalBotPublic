@@ -22,7 +22,7 @@ class Greetings(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         # Replace 'your-channel-id' with the ID of your channel
-        if message.channel.id == settings.Welcome_ID.id:
+        if message.channel.id == settings.welcome_ID.id:
             await message.add_reaction("👋")
         
     @commands.Cog.listener()
@@ -30,7 +30,7 @@ class Greetings(commands.Cog):
         new_nickname = "Your New Nickname"
         await member.edit(nick=new_nickname)
         # Get the channel where you want to send the message
-        channel = self.bot.get_channel(settings.Welcome_ID.id)
+        channel = self.bot.get_channel(settings.welcome_ID.id)
         # Send a message to the channel
         await channel.send(f"Welcome to the server, {member.mention}!")
 

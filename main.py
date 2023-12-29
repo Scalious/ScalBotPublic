@@ -21,7 +21,7 @@ def run(): # Define a function to run the bot
     @app_commands.checks.cooldown(2, 3600, key = lambda i: (i.guild_id, i.user.id)) # 2 uses per hour per user
     async def open_ticket(interaction: discord.Interaction, message: discord.Message):
         await interaction.response.defer()
-        admin_role = discord.utils.get(message.guild.roles, id=settings.ADMIN_ID.id)
+        admin_role = discord.utils.get(message.guild.roles, id=settings.Admin_ID.id)
         overwrites = {
             message.guild.default_role: discord.PermissionOverwrite(read_messages=False), # Deny everyone to see the channel
             #message.author: discord.PermissionOverwrite(read_messages=True), # Allow the author to see the channel

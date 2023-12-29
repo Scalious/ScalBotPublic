@@ -6,6 +6,8 @@ from datetime import datetime
 
 from discord.utils import get
 
+# the listener for rules should be setup in its own Rules class eventually
+
 class Ticketing(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -15,7 +17,7 @@ class Ticketing(commands.Cog):
     # @commands.command()
     # @commands.has_permissions(manage_channels=True)
     # async def ticket(self, ctx):
-    #     admin_id = settings.ADMIN_ID.id
+    #     admin_id = settings.Admin_ID.id
     #     admin_role = discord.utils.get(ctx.guild.roles, id=admin_id)
     #     overwrites = {
     #         ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),
@@ -47,6 +49,21 @@ class Ticketing(commands.Cog):
                 new_member_role = get(interaction.guild.roles, id=settings.New_Member_ID.id)  # New Member role ID
                 await member.add_roles(guest_role)
                 await member.remove_roles(new_member_role)
+
+                # # Update member's points in users.txt
+                # with open('users.txt', 'r') as file:
+                #     users = file.readlines()
+
+                # for i, line in enumerate(users):
+                #     if line.startswith(str(member.id)):
+                #         users[i] = f'{member.id}=0\n'
+                #         break
+                # else:
+                #     users.append(f'{member.id}=0\n')
+
+                # with open('users.txt', 'w') as file:
+                #     file.writelines(users)
+
             if interaction.data["custom_id"] == "close_ticket":
                 if 'ticket-' in interaction.channel.name and interaction.user.guild_permissions.manage_channels:
                     await interaction.channel.delete()

@@ -19,7 +19,7 @@ class Admin(commands.Cog):
     @staticmethod
     def is_owner():
         async def predicate(ctx):
-            admin_role_id = settings.ADMIN_ID.id
+            admin_role_id = settings.Admin_ID.id
             if admin_role_id in [role.id for role in ctx.author.roles]:
                 return True
             else:
@@ -48,7 +48,7 @@ class Admin(commands.Cog):
     @commands.command(hidden=True)
     @is_owner()
     async def rules(self, ctx):
-        channel = self.bot.get_channel(settings.Rules_ID.id)
+        channel = self.bot.get_channel(settings.rules_ID.id)
         await channel.purge()
         view = View()
         view.add_item(Button(style=discord.ButtonStyle.danger, label="Accept", custom_id="accept_rules"))
@@ -64,7 +64,7 @@ class Admin(commands.Cog):
     @commands.command(hidden=True)
     @is_owner()
     async def self_assign(self, ctx):
-        channel = self.bot.get_channel(settings.Roles_ID.id)  # Replace with your channel ID
+        channel = self.bot.get_channel(settings.self_assign_roles_ID.id)  # Replace with your channel ID
         await channel.purge()
         await channel.send(
             "```\nWelcome to the self-assign-roles channel!\n\n"

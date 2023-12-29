@@ -4,8 +4,6 @@
 
 This is a moderation bot created for managing AntiSpam and Ticketing. It also includes a leveling system.
 
-Future iterations to include reaction roles, more checks.
-
 ## Installation
 
 To run this project, you need to have the following dependencies installed:
@@ -18,6 +16,14 @@ You can install the dependencies by running the following command:
 ```bash
 pip install -r requirements.txt
 
+You will need;
+1. Update the file .env with you TOKEN and GUILD id's before running startup.py
+2. Within your setup Discord server: 
+    -Create an Admin role - move this to the top 2 positions
+    -Bot should be in the top 2 positions
+    -Create 4 Reaction roles and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)
+    -their names do not matter but the order is important for the thresholds in startup.py
+=======
 You will need to create a file .env with you TOKEN and GUILD id. before running startup.py
 
 Run startup.py
