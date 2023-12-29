@@ -1,0 +1,49 @@
+import discord, settings, os
+
+intents = discord.Intents.all()
+# Create a Discord client
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    # Get the guild (server) you want to gather IDs from
+    guild = client.get_guild(settings.GUILDS_ID.id)  # Replace 'GUILD_ID' with the ID of your guild
+
+    if not os.path.exists('thresholds.py'):
+        # Open the .env file in append mode
+        with open('.env', 'a') as f:
+            f.write("\n\n")
+            # Iterate over all the roles in the guild
+            for role in guild.roles:
+                # Write the role's ID and name to the file in the format KEY=VALUE
+                f.write(f"{role.name.upper().replace(' ', '_').replace('.', '_').replace('@', '')}={role.id}\n")
+            
+            for channel in guild.channels:
+                f.write(f"{channel.name.upper().replace(' ', '_').replace('-', '_')}={channel.id}\n")
+
+        # Open the .env file in append mode
+        with open('settings.py', 'a') as f:
+            f.write("\n\n")
+            # Iterate over all the channels in the guild
+            for role in guild.roles:     
+                f.write(f"{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}_ID = discord.Object(id=int(os.getenv('{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}')))\n\n") 
+            for channel in guild.channels:
+                f.write(f"{channel.name.replace(' ', '_').replace('-', '_')}_ID = discord.Object(id=int(os.getenv('{channel.name.replace(' ', '_').replace('-', '_')}')))\n\n")
+            
+        # creates the thresholds.py file - not currently used set manually in member_function.py
+        with open('thresholds.py', 'a') as f:
+            non_linear_list = [i**4 for i in range(len(guild.roles))]
+            thresholds = [{'threshold': i, 'role_id': role.id} for i, role in zip(non_linear_list, guild.roles)]
+            f.write("thresholds = [\n\n")      
+            for threshold in thresholds:
+                f.write(f"     {threshold},\n")
+            f.write("\n]\n\n")
+    else:
+        print("Setup has already been complete. You may now run the main.py file.")
+        await client.close()
+
+    print("Done! You may now run the main.py file.")
+    await client.close()   
+
+# Run the Discord client
+client.run(settings.TOKEN)

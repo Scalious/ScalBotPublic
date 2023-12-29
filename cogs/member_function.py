@@ -6,6 +6,9 @@ from discord.ext import commands
 
 import asyncio
 
+# This works but the threshold roles are not in the same order below
+#from thresholds import thresholds
+
 thresholds = [
     {'threshold': 0, 'role_id': settings.Guest_ID.id},  # Guest
     {'threshold': 1, 'role_id': settings.New_Member_ID.id},  # New Member
@@ -67,4 +70,6 @@ class UserHandler(commands.Cog):
 async def setup(bot):
     bot.user_handler = UserHandler(bot)  # Create a new UserHandler instance and add it as an attribute to the bot
     await bot.user_handler.load_users()  # Load users from file
-    await bot.add_cog(bot.user_handler)  # Add the same UserHandler instance as a cog
+    await bot.add_cog(bot.user_handler)  # Add the same UserHandler instance as a cog    {'threshold': 0, 'role_id': 787746412820824074},
+
+
