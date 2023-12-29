@@ -26,11 +26,11 @@ async def on_ready():
             f.write("\n\n")
             # Iterate over all the channels in the guild
             for role in guild.roles:     
-                f.write(f"{role.name.upper().replace(' ', '_').replace('.', '_').replace('@', '')}_ID = discord.Object(id=int(os.getenv('{role.name.upper().replace(' ', '_').replace('.', '_').replace('@', '')}')))\n\n") 
+                f.write(f"{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}_ID = discord.Object(id=int(os.getenv('{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}')))\n\n") 
             for channel in guild.channels:
-                f.write(f"{channel.name.upper().replace(' ', '_').replace('-', '_')}_ID = discord.Object(id=int(os.getenv('{channel.name.upper().replace(' ', '_').replace('-', '_')}')))\n\n")
+                f.write(f"{channel.name.replace(' ', '_').replace('-', '_')}_ID = discord.Object(id=int(os.getenv('{channel.name.replace(' ', '_').replace('-', '_')}')))\n\n")
             
-        # creates the thresholds.py file
+        # creates the thresholds.py file - not currently used set manually in member_function.py
         with open('thresholds.py', 'a') as f:
             non_linear_list = [i**4 for i in range(len(guild.roles))]
             thresholds = [{'threshold': i, 'role_id': role.id} for i, role in zip(non_linear_list, guild.roles)]
@@ -47,4 +47,3 @@ async def on_ready():
 
 # Run the Discord client
 client.run(settings.TOKEN)
-

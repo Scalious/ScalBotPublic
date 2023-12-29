@@ -4,13 +4,8 @@ from discord.ext import commands
 from discord.ext import tasks
 
 import cogs.member_function as mf
-#from cogs.member_function import add_member, users, check_threshold
-#from cogs.member_function import users
 
-#from cogs.member_function import save_users, load_users
 from cogs.member_function import UserHandler
-
-#from datetime import datetime
 
 # Leveling is only possible in the Public Lobby: lounge channel currently
 
@@ -41,7 +36,7 @@ class LevelingCog(commands.Cog):
                         await member.add_roles(role, reason="Passed a new threshold")
                         await self.user_handler.save_users()
                         print(f"Added {role.name} to {member.name}")
-                        channel = self.bot.get_channel(settings.Learning2_ID.id)  # Set to the test channel - 
+                        channel = self.bot.get_channel(settings.scalbot_test_ID.id)  # Set to the test channel - 
                         await channel.send(f"{member.mention} has been given the new role {role.name}!")
             else:
                 await self.user_handler.add_member(member_id_str, member.display_name, 1)# Check if the user is in the dictionary
@@ -63,7 +58,7 @@ class LevelingCog(commands.Cog):
                         if member_role in threshold_roles and member_role.position < role.position:
                             await member.remove_roles(member_role, reason="Exceeds current threshold")
                             print(f"Removed {member_role.name} from {member.name}")
-                            # channel = self.bot.get_channel(settings.Learning2_ID.id)  # Set to the test channel - 
+                            # channel = self.bot.get_channel(settings.scalbot_test_ID.id)  # Set to the test channel - 
                             # await channel.send(f"The Role {member_role.name} has been removed from {member.mention}!")
 
     # Remove roles if they previously had a higher threshold
@@ -82,7 +77,7 @@ class LevelingCog(commands.Cog):
                         if member_role in threshold_roles and member_role.position > role.position:
                             await member.remove_roles(member_role, reason="Exceeds current threshold")
                             print(f"Removed {member_role.name} from {member.name}")
-                            # channel = self.bot.get_channel(settings.Learning2_ID.id)  # Set to the test channel - 
+                            # channel = self.bot.get_channel(settings.scalbot_test_ID.id)  # Set to the test channel - 
                             # await channel.send(f"The Role {member_role.name} has been removed from {member.mention}!")
 
     # Points System for Leveling
@@ -92,7 +87,7 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(message.author.id)
         if type(message.channel) is not discord.TextChannel or message.author.bot: return  # ignore DMs and bots
-        if message.channel.id == settings.Learning_ID.id or message.channel.id == settings.Learning2_ID.id:
+        if message.channel.id == settings.lounge_test_ID.id or message.channel.id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] += 1
                 await self.user_handler.save_users()
@@ -104,7 +99,7 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        if reaction.message.channel.id == settings.Learning_ID.id or reaction.message.channel.id == settings.Learning2_ID.id:
+        if reaction.message.channel.id == settings.lounge_test_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] += 3
                 await self.user_handler.save_users()
@@ -116,7 +111,7 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        if reaction.message.channel.id == settings.Learning_ID.id or reaction.message.channel.id == settings.Learning2_ID.id:
+        if reaction.message.channel.id == settings.lounge_test_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] -= 3
                 await self.user_handler.save_users()
