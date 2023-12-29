@@ -20,6 +20,7 @@ You will need;
 1. Update the file .env with you TOKEN and GUILD id's before running startup.py
 2. Within your setup Discord server: 
     -the bot assumes you have 1 admin role, 1 bot role and 4 reaction roles, to add more you need to modify the startup.py
+    -the Admin and Bot roles are ignored in the leveling.py, if add more roles you will need to include them here
     -Create an Admin role - move this to the top 2 positions
     -Bot should be in the top 2 positions
     -Create 4 Reaction roles and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)

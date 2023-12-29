@@ -6,6 +6,7 @@ from datetime import datetime
 
 from discord.utils import get
 
+logger = settings.logging.getLogger("bot")
 # the listener for rules should be setup in its own Rules class eventually
 
 class Ticketing(commands.Cog):
@@ -35,6 +36,7 @@ class Ticketing(commands.Cog):
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
         if interaction.type == InteractionType.component:
+            # Rules acceptance
             if interaction.data["custom_id"] == "accept_rules":
                 await interaction.response.defer()
                 member = interaction.user
@@ -49,21 +51,7 @@ class Ticketing(commands.Cog):
                 new_member_role = get(interaction.guild.roles, id=settings.New_Member_ID.id)  # New Member role ID
                 await member.add_roles(guest_role)
                 await member.remove_roles(new_member_role)
-
-                # # Update member's points in users.txt
-                # with open('users.txt', 'r') as file:
-                #     users = file.readlines()
-
-                # for i, line in enumerate(users):
-                #     if line.startswith(str(member.id)):
-                #         users[i] = f'{member.id}=0\n'
-                #         break
-                # else:
-                #     users.append(f'{member.id}=0\n')
-
-                # with open('users.txt', 'w') as file:
-                #     file.writelines(users)
-
+            # Ticketing
             if interaction.data["custom_id"] == "close_ticket":
                 if 'ticket-' in interaction.channel.name and interaction.user.guild_permissions.manage_channels:
                     await interaction.channel.delete()

@@ -2,6 +2,10 @@ from discord.ext import commands
 
 import discord
 
+import settings
+
+logger = settings.logging.getLogger("bot")
+
 class Joined(commands.Cog):
 
     def __init__(self, bot):

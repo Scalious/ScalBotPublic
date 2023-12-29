@@ -2,6 +2,9 @@ import discord
 from discord.ext import commands
 import math
 
+import settings
+logger = settings.logging.getLogger("bot")
+
 class Math(commands.Cog):
 
     def __init__(self, bot):
