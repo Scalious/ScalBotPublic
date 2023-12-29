@@ -25,15 +25,15 @@ class LevelingCog(commands.Cog):
         self.user_handler = user_handler  
 
     # Add roles if they pass a new threshold
-    @tasks.loop(minutes=0.50)  # Run this task every 30 seconds
+    @tasks.loop(seconds=5)  # Run this task every 30 seconds
     async def add_roles(self):
         guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
-        for member in guild.members: # Loop through all members in the guild
-            if member.id not in self.user_handler._users: # If the user is not in the dictionary
-                await self.user_handler.add_member(member.id, member.display_name, 1) # Add the user to the dictionary
-            users = self.user_handler.get_users()
-            if member.id in users:  # Check if the user is in the dictionary
-                points = users[member.id]['points']  # Get the user's points from the dictionary
+        await self.user_handler.load_users()
+        users = self.user_handler.get_users()
+        for member in guild.members:
+            member_id_str = str(member.id)
+            if member_id_str in users:  
+                points = users[member_id_str]['points']  # Get the user's points from the dictionary
                 role_id = await self.user_handler.check_threshold(points) 
                 if role_id:
                     role = guild.get_role(int(role_id))
@@ -41,16 +41,20 @@ class LevelingCog(commands.Cog):
                         await member.add_roles(role, reason="Passed a new threshold")
                         await self.user_handler.save_users()
                         print(f"Added {role.name} to {member.name}")
+                        channel = self.bot.get_channel(settings.Learning2_ID.id)  # Set to the test channel - 
+                        await channel.send(f"{member.mention} has been given the new role {role.name}!")
+            else:
+                await self.user_handler.add_member(member_id_str, member.display_name, 1)# Check if the user is in the dictionary
         await self.user_handler.save_users() #  Save users to file
 
     # Remove roles if they exceed the threshold
-    @tasks.loop(minutes=0.50)  # Run this task every 30 seconds
+    @tasks.loop(seconds=7)  # Run this task every 6 seconds
     async def remove_roles_exceed(self):
         guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
         for member in guild.members:
             users = self.user_handler.get_users()
-            if member.id in users:
-                points = users[member.id]['points']
+            if str(member.id) in users:
+                points = users[str(member.id)]['points']
                 role_id = await self.user_handler.check_threshold(points)
                 if role_id:
                     role = guild.get_role(int(role_id))
@@ -59,15 +63,17 @@ class LevelingCog(commands.Cog):
                         if member_role in threshold_roles and member_role.position < role.position:
                             await member.remove_roles(member_role, reason="Exceeds current threshold")
                             print(f"Removed {member_role.name} from {member.name}")
+                            # channel = self.bot.get_channel(settings.Learning2_ID.id)  # Set to the test channel - 
+                            # await channel.send(f"The Role {member_role.name} has been removed from {member.mention}!")
 
     # Remove roles if they previously had a higher threshold
-    @tasks.loop(minutes=0.50)  # Run this task every 30 seconds
+    @tasks.loop(seconds=7)  # Run this task every 6 seconds
     async def remove_roles(self):
         guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
         for member in guild.members:
             users = self.user_handler.get_users()
-            if member.id in users:
-                points = users[member.id]['points']
+            if str(member.id) in users:
+                points = users[str(member.id)]['points']
                 role_id = await self.user_handler.check_threshold(points)
                 if role_id:
                     role = guild.get_role(int(role_id))
@@ -76,67 +82,45 @@ class LevelingCog(commands.Cog):
                         if member_role in threshold_roles and member_role.position > role.position:
                             await member.remove_roles(member_role, reason="Exceeds current threshold")
                             print(f"Removed {member_role.name} from {member.name}")
-
-    # Test Commands
-
-    @commands.command(
-        enabled=True, #enableds/disables the command
-        hidden=False #hides the command description
-    )
-    async def print_users(self, ctx):
-        await self.add_roles()
-        users = self.user_handler.get_users()
-        print(f'User ID: {ctx.author.id}, Points: {users[ctx.author.id]["points"]}')
-        await ctx.send(f'Users: {users}')
- 
-    @commands.command(
-        enabled=True, #enableds/disables the command
-        hidden=False #hides the command description
-    )
-    async def purge_channel(self, ctx):
-        channel = ctx.channel
-        await channel.purge()
-        await ctx.send("Channel purged successfully.")
+                            # channel = self.bot.get_channel(settings.Learning2_ID.id)  # Set to the test channel - 
+                            # await channel.send(f"The Role {member_role.name} has been removed from {member.mention}!")
 
     # Points System for Leveling
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        await self.add_roles()
+        author_id = str(message.author.id)
         if type(message.channel) is not discord.TextChannel or message.author.bot: return  # ignore DMs and bots
-        # Check if the message is sent in the specific channel you want to listen to
         if message.channel.id == settings.Learning_ID.id or message.channel.id == settings.Learning2_ID.id:
-            if message.author.id in self.user_handler._users:
-                self.user_handler._users[message.author.id]['points'] += 1
-                self.update_counter += 1
-                if self.update_counter == 5: 
-                    await self.user_handler.save_users()
-                    self.update_counter = 0 
+            if author_id in self.user_handler._users:
+                self.user_handler._users[author_id]['points'] += 1
+                await self.user_handler.save_users()
             else:
-                #await mf.add_member(message.author.id, message.author.name, 1)
                 pass
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
+        await self.add_roles()
+        author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        # Check if the reaction is added in the specific channel you want to listen to
         if reaction.message.channel.id == settings.Learning_ID.id or reaction.message.channel.id == settings.Learning2_ID.id:
-            if user.id in self.user_handler._users:
-                self.user_handler._users[user.id]['points'] += 3
+            if author_id in self.user_handler._users:
+                self.user_handler._users[author_id]['points'] += 3
                 await self.user_handler.save_users()
             else:
-                #await mf.add_member(user.id, user.name, 300)
                 pass
 
     @commands.Cog.listener()
     async def on_reaction_remove(self, reaction, user):
+        await self.add_roles()
+        author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        # Check if the reaction is added in the specific channel you want to listen to
         if reaction.message.channel.id == settings.Learning_ID.id or reaction.message.channel.id == settings.Learning2_ID.id:
-            if user.id in self.user_handler._users:
-                self.user_handler._users[user.id]['points'] -= 3
+            if author_id in self.user_handler._users:
+                self.user_handler._users[author_id]['points'] -= 3
                 await self.user_handler.save_users()
             else:
-                #await mf.add_member(user.id, user.name, 300)
                 pass       
 
 async def setup(bot):

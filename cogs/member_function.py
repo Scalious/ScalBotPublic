@@ -7,7 +7,7 @@ from discord.ext import commands
 import asyncio
 
 thresholds = [
-    #{'threshold': 0, 'role_id': settings.Guest_ID.id},  # Guest
+    {'threshold': 0, 'role_id': settings.Guest_ID.id},  # Guest
     {'threshold': 1, 'role_id': settings.New_Member_ID.id},  # New Member
     {'threshold': 10, 'role_id': settings.Member_ID.id},  # Member
     {'threshold': 200, 'role_id': settings.Super_Member_ID.id},  # Super Member
@@ -19,6 +19,7 @@ class UserHandler(commands.Cog):
         self.bot = bot
         self._users = {}
         self._lock = asyncio.Lock()
+        self.bot.loop.create_task(self.load_users())
 
     def get_users(self):
         return self._users
@@ -35,15 +36,17 @@ class UserHandler(commands.Cog):
                 if points is not None:
                     self._users[member_id]['points'] = points
 
+            # Write the users to the file
+            with open('users.txt', 'w') as f:
+                json.dump(self._users, f)
+
     async def check_threshold(self, points): 
-        global users
         thresholds.sort(key=lambda x: x['threshold'], reverse=True)
         for role in thresholds:
             if points >= role['threshold']:
                 return role['role_id'] 
         return None
 
-    # this function does not correctly update the users points or save them between bot restarts and must be cleared or delete the users.txt file
     async def save_users(self):
         async with self._lock:
             with open('users.txt', 'w') as f:
