@@ -23,6 +23,8 @@ You will need;
     -Bot should be in the top 2 positions
     -Create 4 Reaction roles and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)
     -their names do not matter but the order is important for the thresholds in startup.py
+=======
+You will need to create a file .env with you TOKEN and GUILD id. before running startup.py
 
 Run startup.py
 
@@ -35,9 +37,3 @@ WARNING    - discord.client : PyNaCl is not installed, voice will NOT be support
 Error: 'users.txt' contains invalid JSON. - occurs when users.txt is not created with {} dictionary
 Reloading any file with a tasks.loop will cause repeat issues with .reload commands
 
-Common Issues:
-Roles order incorrect or not all made
-Bot permission Errors
-    -can be a result of improper settings references
-    -can be a result of the discord permissions
-Duplicate value defintions in .env, settings.py and thresholds.py (like.. NSFW channel and category can't been the same name)
