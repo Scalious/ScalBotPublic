@@ -7,7 +7,7 @@ from discord import app_commands
 from cogs.member_function import UserHandler
 
 logger = settings.logging.getLogger("bot")
-  
+
 def run(): # Define a function to run the bot
     intents = discord.Intents.default() # Temporary Enables default Intents
     intents = discord.Intents.all() # Temporary Enables all Intents

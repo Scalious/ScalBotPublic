@@ -16,24 +16,7 @@ BASE_DIR = pathlib.Path(__file__).parent
 CMDS_DIR = BASE_DIR / "commands"
 COGS_DIR = BASE_DIR / "cogs"
 
-# these are hard coded as part of the .env file
 GUILDS_ID = discord.Object(id=int(os.getenv("GUILD")))
-ADMIN_ID = discord.Object(id=int(os.getenv("Admin")))
-Guest_ID = discord.Object(id=int(os.getenv("Guest")))
-New_Member_ID = discord.Object(id=int(os.getenv("New_Member")))
-Member_ID = discord.Object(id=int(os.getenv("Member")))
-Super_Member_ID = discord.Object(id=int(os.getenv("Super_Member")))
-NSFW_ID = discord.Object(id=int(os.getenv("NSFW")))
-EVENTS_ID = discord.Object(id=int(os.getenv("Events")))
-WAVE_ID = discord.Object(id=int(os.getenv("Wave")))
-FROG_ID = discord.Object(id=int(os.getenv("Frog")))
-
-
-Learning_ID = discord.Object(id=int(os.getenv("Learning_Channel")))
-Learning2_ID = discord.Object(id=int(os.getenv("Learning_Channel2")))
-Rules_ID = discord.Object(id=int(os.getenv("Rules")))
-Welcome_ID = discord.Object(id=int(os.getenv("Welcome")))
-Roles_ID = discord.Object(id=int(os.getenv("Roles")))
 
 LOGGING_CONFIG = {
     "version": 1,
@@ -80,3 +63,62 @@ LOGGING_CONFIG = {
 }
 
 dictConfig(LOGGING_CONFIG)
+
+
+EVERYONE_ID = discord.Object(id=int(os.getenv('EVERYONE')))
+
+FROG_ID = discord.Object(id=int(os.getenv('FROG')))
+
+WAVE_ID = discord.Object(id=int(os.getenv('WAVE')))
+
+EVENTS_ID = discord.Object(id=int(os.getenv('EVENTS')))
+
+NSFW_ID = discord.Object(id=int(os.getenv('NSFW')))
+
+GUEST_ID = discord.Object(id=int(os.getenv('GUEST')))
+
+USERS_ID = discord.Object(id=int(os.getenv('USERS')))
+
+NEW_MEMBER_ID = discord.Object(id=int(os.getenv('NEW_MEMBER')))
+
+MEMBER_ID = discord.Object(id=int(os.getenv('MEMBER')))
+
+SUPER_MEMBER_ID = discord.Object(id=int(os.getenv('SUPER_MEMBER')))
+
+SCALBOT3_0_ID = discord.Object(id=int(os.getenv('SCALBOT3_0')))
+
+ADMIN_ID = discord.Object(id=int(os.getenv('ADMIN')))
+
+PUBLIC_LOBBY_ID = discord.Object(id=int(os.getenv('PUBLIC_LOBBY')))
+
+VOICE_CHANNELS_ID = discord.Object(id=int(os.getenv('VOICE_CHANNELS')))
+
+GENERAL_ID = discord.Object(id=int(os.getenv('GENERAL')))
+
+SYSTEM_ID = discord.Object(id=int(os.getenv('SYSTEM')))
+
+RULES_ID = discord.Object(id=int(os.getenv('RULES')))
+
+SCALBOT_TEST_ID = discord.Object(id=int(os.getenv('SCALBOT_TEST')))
+
+GENERAL_ID = discord.Object(id=int(os.getenv('GENERAL')))
+
+WELCOME_ID = discord.Object(id=int(os.getenv('WELCOME')))
+
+SERVER_ADMIN_ID = discord.Object(id=int(os.getenv('SERVER_ADMIN')))
+
+TEST1_ID = discord.Object(id=int(os.getenv('TEST1')))
+
+TEST2_ID = discord.Object(id=int(os.getenv('TEST2')))
+
+TEST3_ID = discord.Object(id=int(os.getenv('TEST3')))
+
+TEST4_ID = discord.Object(id=int(os.getenv('TEST4')))
+
+LOBBY_ID = discord.Object(id=int(os.getenv('LOBBY')))
+
+LOUNGE_TEST_ID = discord.Object(id=int(os.getenv('LOUNGE_TEST')))
+
+LOUNGE_ID = discord.Object(id=int(os.getenv('LOUNGE')))
+
+SELF_ASSIGN_ROLES_ID = discord.Object(id=int(os.getenv('SELF_ASSIGN_ROLES')))
