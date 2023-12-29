@@ -6,15 +6,7 @@ from discord.ext import commands
 
 import asyncio
 
-# This works but the threshold roles are not in the same order below
-#from thresholds import thresholds
-
-thresholds = [
-    {'threshold': 0, 'role_id': settings.Guest_ID.id},  # Guest
-    {'threshold': 1, 'role_id': settings.New_Member_ID.id},  # New Member
-    {'threshold': 10, 'role_id': settings.Member_ID.id},  # Member
-    {'threshold': 200, 'role_id': settings.Super_Member_ID.id},  # Super Member
-]
+from thresholds import thresholds
 
 class UserHandler(commands.Cog):
     

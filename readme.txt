@@ -4,8 +4,6 @@
 
 This is a moderation bot created for managing AntiSpam and Ticketing. It also includes a leveling system.
 
-Future iterations to include reaction roles, more checks.
-
 ## Installation
 
 To run this project, you need to have the following dependencies installed:
@@ -18,22 +16,28 @@ You can install the dependencies by running the following command:
 ```bash
 pip install -r requirements.txt
 
-The following id's are hard-coded as I was unable to get them to function via the settings file;
+You will need;
+1. Update the file .env with you TOKEN and GUILD id's before running startup.py
+2. Within your setup Discord server: 
+    -Create an Admin role - move this to the top 2 positions
+    -Bot should be in the top 2 positions
+    -Create 4 Reaction roles and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)
+    -their names do not matter but the order is important for the thresholds in startup.py
 
-Guest Role ID
-New Member Role ID
-Member Role ID
-Super Member Role ID
-Leveling Channel ID (the channels members can earn points to become Member/Super Member)
-    Currently the 2nd learning channel is setup to be the test Channel
-Guild ID (this is your discord server)
-Admin Role ID
-Rules Channel ID (the channel you wish to host your rules accept/decline message)
+Run startup.py
+
+Run main.py
 
 ## Known Issues
 
 On startup Errors:
 WARNING    - discord.client : PyNaCl is not installed, voice will NOT be supported
-Error: 'users.txt' contains invalid JSON. - occurs when users.txt is not created
-Reloading any file with a tasks.loop will cause repeat issues
+Error: 'users.txt' contains invalid JSON. - occurs when users.txt is not created with {} dictionary
+Reloading any file with a tasks.loop will cause repeat issues with .reload commands
 
+Common Issues:
+Roles order incorrect or not all made
+Bot permission Errors
+    -can be a result of improper settings references
+    -can be a result of the discord permissions
+Duplicate value defintions in .env, settings.py and thresholds.py (like.. NSFW channel and category can't been the same name)

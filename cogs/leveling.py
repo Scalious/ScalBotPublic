@@ -32,7 +32,11 @@ class LevelingCog(commands.Cog):
                 role_id = await self.user_handler.check_threshold(points) 
                 if role_id:
                     role = guild.get_role(int(role_id))
-                    if role not in member.roles:  # Check if the user already has the role
+                    ignore_roles_ids = [
+                        settings.Admin_ID.id,
+                        settings.ScalBot3_0_ID.id,
+                    ]
+                    if role not in member.roles and role.id not in ignore_roles_ids:  # Check if the user already has the role
                         await member.add_roles(role, reason="Passed a new threshold")
                         await self.user_handler.save_users()
                         print(f"Added {role.name} to {member.name}")
@@ -54,12 +58,14 @@ class LevelingCog(commands.Cog):
                 if role_id:
                     role = guild.get_role(int(role_id))
                     threshold_roles = [guild.get_role(int(role['role_id'])) for role in mf.thresholds]
+                    ignore_roles_ids = [
+                        settings.Admin_ID.id,
+                        settings.ScalBot3_0_ID.id,
+                    ]
                     for member_role in member.roles:
-                        if member_role in threshold_roles and member_role.position < role.position:
+                        if member_role in threshold_roles and member_role.position < role.position and member_role.id not in ignore_roles_ids:
                             await member.remove_roles(member_role, reason="Exceeds current threshold")
                             print(f"Removed {member_role.name} from {member.name}")
-                            # channel = self.bot.get_channel(settings.scalbot_test_ID.id)  # Set to the test channel - 
-                            # await channel.send(f"The Role {member_role.name} has been removed from {member.mention}!")
 
     # Remove roles if they previously had a higher threshold
     @tasks.loop(seconds=7)  # Run this task every 6 seconds
@@ -73,12 +79,14 @@ class LevelingCog(commands.Cog):
                 if role_id:
                     role = guild.get_role(int(role_id))
                     threshold_roles = [guild.get_role(int(role['role_id'])) for role in mf.thresholds]
+                    ignore_roles_ids = [
+                        settings.Admin_ID.id,
+                        settings.ScalBot3_0_ID.id,
+                    ]
                     for member_role in member.roles:
-                        if member_role in threshold_roles and member_role.position > role.position:
+                        if member_role in threshold_roles and member_role.position > role.position and member_role.id not in ignore_roles_ids:
                             await member.remove_roles(member_role, reason="Exceeds current threshold")
                             print(f"Removed {member_role.name} from {member.name}")
-                            # channel = self.bot.get_channel(settings.scalbot_test_ID.id)  # Set to the test channel - 
-                            # await channel.send(f"The Role {member_role.name} has been removed from {member.mention}!")
 
     # Points System for Leveling
 
