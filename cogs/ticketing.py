@@ -1,4 +1,4 @@
-import discord, os
+import discord, os, settings
 from discord.ext import commands
 #from discord.ui import Button, View
 from discord import InteractionType, utils
@@ -10,12 +10,12 @@ class Ticketing(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Alernative method to call the command using .ticket
+    # Alernative method to call the command using .ticket as a command
 
     # @commands.command()
     # @commands.has_permissions(manage_channels=True)
     # async def ticket(self, ctx):
-    #     admin_id = 787747360398770176
+    #     admin_id = settings.ADMIN_ID.id
     #     admin_role = discord.utils.get(ctx.guild.roles, id=admin_id)
     #     overwrites = {
     #         ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),
@@ -36,15 +36,15 @@ class Ticketing(commands.Cog):
             if interaction.data["custom_id"] == "accept_rules":
                 await interaction.response.defer()
                 member = interaction.user
-                new_member_role = get(interaction.guild.roles, id=1189245504912113664)  # New Member role ID
-                guest_role = get(interaction.guild.roles, id=1189255069082853527)  # Guest role ID
+                new_member_role = get(interaction.guild.roles, id=settings.New_Member_ID.id)  # New Member role ID
+                guest_role = get(interaction.guild.roles, id=settings.Guest_ID.id)  # Guest role ID
                 await member.add_roles(new_member_role)
                 await member.remove_roles(guest_role)
             if interaction.data["custom_id"] == "decline_rules":
                 await interaction.response.defer()
                 member = interaction.user
-                guest_role = get(interaction.guild.roles, id=1189255069082853527)  # Guest role ID
-                new_member_role = get(interaction.guild.roles, id=1189245504912113664)  # New Member role ID
+                guest_role = get(interaction.guild.roles, id=settings.Guest_ID.id)  # Guest role ID
+                new_member_role = get(interaction.guild.roles, id=settings.New_Member_ID.id)  # New Member role ID
                 await member.add_roles(guest_role)
                 await member.remove_roles(new_member_role)
             if interaction.data["custom_id"] == "close_ticket":
