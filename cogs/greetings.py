@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 
-from discord import ui, ButtonStyle, Member, Role
-from discord.ui import Button, View
+from discord import ui, Member, Role
+# from discord.ui import Button, View
 from discord.utils import get
 
 import settings
@@ -19,43 +19,6 @@ class Greetings(commands.Cog):
             self.accept_role = accept_role
             self.remove_role = remove_role
 
-    # This NotOwner class is the same in main.py, but I'm not sure how to import it yet.
-        # I want to separate this into a separate file, but I'm not sure how to do that yet.
-    class NotOwner(commands.CheckFailure):
-        pass
-
-    def is_owner():
-        async def predicate(ctx):
-            admin_role_id = settings.ADMIN_ID.id
-            if admin_role_id in [role.id for role in ctx.author.roles]:
-                return True
-            else:
-                raise commands.CommandError("Permission Denied.")
-                print (admin_role_id)
-        return commands.check(predicate) 
-        # I want to separate this into a separate file, but I'm not sure how to do that yet.
-    @commands.command(
-        enabled=True, #enableds/disables the command
-        hidden=True #hides the command description
-    )
-    @is_owner()
-    async def rules(self, ctx):
-        # Get the channel
-        channel = self.bot.get_channel(settings.Rules_ID.id)  # Replace with your channel ID
-        # Purge the channel
-        await channel.purge()
-        # Get the message
-        view = View()
-        view.add_item(Button(style=discord.ButtonStyle.danger, label="Accept", custom_id="accept_rules"))
-        view.add_item(Button(style=discord.ButtonStyle.primary, label="Decline", custom_id="decline_rules"))
-        await channel.send(
-            "Welcome to the server!\n\n"
-            "Rules:\n\n"
-            "1. No malice.\n\n"
-            "Please accept the rules by clicking the button below",
-            view=view
-        )
-
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         # Replace 'your-channel-id' with the ID of your channel
@@ -64,6 +27,8 @@ class Greetings(commands.Cog):
         
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        new_nickname = "Your New Nickname"
+        await member.edit(nick=new_nickname)
         # Get the channel where you want to send the message
         channel = self.bot.get_channel(settings.Welcome_ID.id)
         # Send a message to the channel

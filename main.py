@@ -1,20 +1,10 @@
 import discord, settings
 from discord.ext import commands
-from cogs.greetings import Greetings
-from cogs.ping import Ping
-from cogs.roll import Roll
-from cogs.joined import Joined
-from cogs.slap import Slap
-from cogs.math import Math
-from cogs.antispam import Antispam
-from cogs.ticketing import Ticketing
-from cogs.leveling import LevelingCog
-from cogs.member_function import UserHandler
 
 from discord.ui import Button, View
 from discord import app_commands
 
-from datetime import timedelta
+from cogs.member_function import UserHandler
 
 logger = settings.logging.getLogger("bot")
   
@@ -54,10 +44,8 @@ def run(): # Define a function to run the bot
         logger.info(f"User: {bot.user} (ID: {bot.user.id})") # Logs the bot's username and ID
 
         bot.user_handler = UserHandler(bot)  # Create a new UserHandler instance and add it as an attribute to the bot
-        await bot.user_handler.load_users()  # Load users from file
-
-        bot.tree.copy_global_to(guild=settings.GUILDS_ID)  # Copy global commands to guild
-        await bot.tree.sync(guild=settings.GUILDS_ID) # Sync commands to guild       
+        await bot.user_handler.load_users()  # Load users from file  
+        print(bot.user_handler.get_users()) # Print users to console
         
         # for cmd_file in settings.CMDS_DIR.glob("*.py"): # Load all commands in the commands folder
         #     if cmd_file.name != "__init__.py":
@@ -65,57 +53,12 @@ def run(): # Define a function to run the bot
 
         for cog_file in settings.COGS_DIR.glob("*.py"): # Load all cogs in the cogs folder
             if cog_file.name != "__init__.py":
-                await bot.load_extension(f"cogs.{cog_file.stem}")       
+                await bot.load_extension(f"cogs.{cog_file.stem}")  
+
+        bot.tree.copy_global_to(guild=settings.GUILDS_ID)  # Copy global commands to guild
+        await bot.tree.sync(guild=settings.GUILDS_ID) # Sync commands to guild          
                                         
         print(f'We have logged in as {bot.user}')   # Prints the bot's username and identifier
-
-    # Custom Check for Admin Commands
-        # I want to separate this into a separate file, but I'm not sure how to do that yet.    
-    class NotOwner(commands.CheckFailure):
-        pass
-
-    def is_owner():
-        async def predicate(ctx):
-            admin_role_id = settings.ADMIN_ID.id
-            if admin_role_id in [role.id for role in ctx.author.roles]:
-                return True
-            else:
-                raise commands.CommandError("Permission Denied.")
-        return commands.check(predicate) 
-
-    # Admin Commands 
-
-    @bot.command(hidden=True)
-    @is_owner()
-    async def load(ctx, cog:str):
-        logger.info(f"Loading {cog}...")
-        await bot.load_extension(f"cogs.{cog.lower()}") # Load a cog
-
-    @bot.command(hidden=True)
-    @is_owner()
-    async def unload(ctx, cog:str):
-        logger.info(f"Unloading {cog}...")
-        await bot.unload_extension(f"cogs.{cog.lower()}") # Unload a cog
-
-    @bot.command(hidden=True)
-    @is_owner()
-    async def reload(ctx, cog:str):
-        logger.info(f"Reloading {cog}...")
-        await bot.reload_extension(f"cogs.{cog.lower()}") # Reload a cog
-
-    # Error Handling     
-        # This could be a listener instead of an event, but I'm not sure how to do that yet.
-    @bot.event
-    async def on_command_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Error. Try ***.help {command}*** if are having issues.") #await ctx.send("Handled Error Globally")  
-        elif isinstance(error, commands.CommandOnCooldown):
-            cooldown_time = timedelta(seconds=int(error.retry_after))
-            logger.warning(f'CommandOnCooldown for command {ctx.command}: retry after {cooldown_time} seconds')
-            await ctx.send(f'You are on cooldown. Try again in {cooldown_time} seconds.')
-        elif isinstance(error, commands.CommandError):
-            logger.error(f'CommandError in command {ctx.command}: {error}')
-            await ctx.send(f'Error: {error}')
     
     bot.run(settings.TOKEN)  # Run the bot with your token
 

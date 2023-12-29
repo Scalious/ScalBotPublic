@@ -25,6 +25,7 @@ New Member Role ID
 Member Role ID
 Super Member Role ID
 Leveling Channel ID (the channels members can earn points to become Member/Super Member)
+    Currently the 2nd learning channel is setup to be the test Channel
 Guild ID (this is your discord server)
 Admin Role ID
 Rules Channel ID (the channel you wish to host your rules accept/decline message)
@@ -33,8 +34,6 @@ Rules Channel ID (the channel you wish to host your rules accept/decline message
 
 On startup Errors:
 WARNING    - discord.client : PyNaCl is not installed, voice will NOT be supported
-Error: 'users.txt' contains invalid JSON.
-Error: 'users.txt' contains invalid JSON.
+Error: 'users.txt' contains invalid JSON. - occurs when users.txt is not created
+Reloading any file with a tasks.loop will cause repeat issues
 
-When restarting the bot the users.txt file does not correctly update the user information and creates a duplicate. This means user data is lost upon restart.
--the bot otherwise functions
