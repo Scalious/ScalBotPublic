@@ -1,6 +1,8 @@
 import discord, settings
 from discord.ext import commands
 
+logger = settings.logging.getLogger("bot")
+
 class ReactionRoles(commands.Cog):
 
     def __init__(self, bot):

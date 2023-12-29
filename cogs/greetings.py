@@ -2,10 +2,12 @@ import discord
 from discord.ext import commands
 
 from discord import ui, Member, Role
-# from discord.ui import Button, View
+
 from discord.utils import get
 
 import settings
+
+logger = settings.logging.getLogger("bot")
 
 class Greetings(commands.Cog):
 

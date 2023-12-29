@@ -45,7 +45,7 @@ def run(): # Define a function to run the bot
 
         bot.user_handler = UserHandler(bot)  # Create a new UserHandler instance and add it as an attribute to the bot
         await bot.user_handler.load_users()  # Load users from file  
-        print(bot.user_handler.get_users()) # Print users to console
+        #print(bot.user_handler.get_users()) # Print users to console
         
         # for cmd_file in settings.CMDS_DIR.glob("*.py"): # Load all commands in the commands folder
         #     if cmd_file.name != "__init__.py":

@@ -63,3 +63,64 @@ LOGGING_CONFIG = {
 }
 
 dictConfig(LOGGING_CONFIG)
+
+everyone_ID = discord.Object(id=int(os.getenv('everyone')))
+
+Frog_ID = discord.Object(id=int(os.getenv('Frog')))
+
+Wave_ID = discord.Object(id=int(os.getenv('Wave')))
+
+Events_ID = discord.Object(id=int(os.getenv('Events')))
+
+NSFW_ID = discord.Object(id=int(os.getenv('NSFW')))
+
+Guest_ID = discord.Object(id=int(os.getenv('Guest')))
+
+New_Member_ID = discord.Object(id=int(os.getenv('New_Member')))
+
+Member_ID = discord.Object(id=int(os.getenv('Member')))
+
+Super_Member_ID = discord.Object(id=int(os.getenv('Super_Member')))
+
+ScalBot3_0_ID = discord.Object(id=int(os.getenv('ScalBot3_0')))
+
+Admin_ID = discord.Object(id=int(os.getenv('Admin')))
+
+Public_Lobby_ID = discord.Object(id=int(os.getenv('Public_Lobby')))
+
+Voice_Channels_ID = discord.Object(id=int(os.getenv('Voice_Channels')))
+
+General_ID = discord.Object(id=int(os.getenv('General')))
+
+system_ID = discord.Object(id=int(os.getenv('system')))
+
+rules_ID = discord.Object(id=int(os.getenv('rules')))
+
+scalbot_test_ID = discord.Object(id=int(os.getenv('scalbot_test')))
+
+general_ID = discord.Object(id=int(os.getenv('general')))
+
+welcome_ID = discord.Object(id=int(os.getenv('welcome')))
+
+Server_Admin_ID = discord.Object(id=int(os.getenv('Server_Admin')))
+
+test1_ID = discord.Object(id=int(os.getenv('test1')))
+
+test2_ID = discord.Object(id=int(os.getenv('test2')))
+
+test3_ID = discord.Object(id=int(os.getenv('test3')))
+
+test4_ID = discord.Object(id=int(os.getenv('test4')))
+
+Lobby_ID = discord.Object(id=int(os.getenv('Lobby')))
+
+lounge_test_ID = discord.Object(id=int(os.getenv('lounge_test')))
+
+lounge_ID = discord.Object(id=int(os.getenv('lounge')))
+
+self_assign_roles_ID = discord.Object(id=int(os.getenv('self_assign_roles')))
+
+Adult_Content_ID = discord.Object(id=int(os.getenv('Adult_Content')))
+
+Events_ID = discord.Object(id=int(os.getenv('Events')))
+

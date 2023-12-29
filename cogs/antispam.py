@@ -7,6 +7,7 @@ import collections
 import logging
 
 import settings
+logger = settings.logging.getLogger("bot")
 
 LINK_REGEX = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
 MESSAGE_LIMIT = 5 #number of messages before warnings in 15 seconds
@@ -16,17 +17,15 @@ VIOLATION_LIMIT = 4 #number of violations before timeout in 60 seconds
 TIMEOUT_DURATION = 10 #minutes 
 DELETE_AFTER = 5 #seconds
 
-logger = settings.logging.getLogger("bot")
-
 class Antispam(commands.Cog):
     """A cog for preventing spam in a Discord server."""
 
     def __init__(self, bot):
         self.bot = bot
-        self.anti_spam_message = commands.CooldownMapping.from_cooldown(MESSAGE_LIMIT, 15, commands.BucketType.member) # 5 messages in 15 seconds
-        self.anti_spam_message_links = commands.CooldownMapping.from_cooldown(LINK_LIMIT, 30, commands.BucketType.member) # 4 links in 30 seconds
-        self.anti_spam_reaction = commands.CooldownMapping.from_cooldown(REACTION_LIMIT, 15, commands.BucketType.member) # 10 reactions in 15 seconds
-        self.too_many_violations = commands.CooldownMapping.from_cooldown(VIOLATION_LIMIT, 60, commands.BucketType.member) # 3 violations in 60 seconds
+        self.anti_spam_message = commands.CooldownMapping.from_cooldown(MESSAGE_LIMIT, 15, commands.BucketType.member) # messages in 15 seconds
+        self.anti_spam_message_links = commands.CooldownMapping.from_cooldown(LINK_LIMIT, 30, commands.BucketType.member) # links in 30 seconds
+        self.anti_spam_reaction = commands.CooldownMapping.from_cooldown(REACTION_LIMIT, 15, commands.BucketType.member) # reactions in 15 seconds
+        self.too_many_violations = commands.CooldownMapping.from_cooldown(VIOLATION_LIMIT, 60, commands.BucketType.member) # violations in 60 seconds
 
         self.message_cache = collections.defaultdict(list)
 
@@ -64,7 +63,7 @@ class Antispam(commands.Cog):
                 violations = self.too_many_violations.get_bucket(message)
                 check = violations.update_rate_limit()
                 if check:
-                    if any(role.id == settings.ADMIN_ID.id for role in message.author.roles):
+                    if any(role.id == settings.Admin_ID.id for role in message.author.roles):
                         await message.channel.send(f"Powwa ABUUSE! {message.author.mention}")
                         return
                     await self.handle_spam(message, message.author, "spamming links")
@@ -82,7 +81,7 @@ class Antispam(commands.Cog):
                 violations = self.too_many_violations.get_bucket(message)
                 check = violations.update_rate_limit()
                 if check:
-                    if any(role.id == settings.ADMIN_ID.id for role in message.author.roles):
+                    if any(role.id == settings.Admin_ID.id for role in message.author.roles):
                         await message.channel.send(f"Powwa ABUUSE! {message.author.mention}")
                         return
                     await self.handle_spam(message, message.author, "Spamming messages")          

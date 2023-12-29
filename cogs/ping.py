@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
 
+import settings
+logger = settings.logging.getLogger("bot")
+
 class Ping(commands.Cog):
 
     def __init__(self, bot):

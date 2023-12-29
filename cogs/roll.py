@@ -3,6 +3,9 @@ from discord.ext import commands
 
 import random
 
+import settings
+logger = settings.logging.getLogger("bot")
+
 class Roll(commands.Cog):
 
     def __init__(self, bot):
