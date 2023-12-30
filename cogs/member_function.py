@@ -17,11 +17,19 @@ class UserHandler(commands.Cog):
         self._users = {}
         self._lock = asyncio.Lock()
         self.bot.loop.create_task(self.load_users())
+        self.bot.loop.create_task(self.save_users_periodically())
+        self.update_interval = 5 # Save users every 5 seconds
 
     def get_users(self):
-        return self._users
+        return self._users   
+    
+    async def save_users_periodically(self):
+        while True:
+            await asyncio.sleep(self.update_interval)
+            with open('users.json', 'w') as file:
+                json.dump(self._users, file, indent=4)
 
-    async def add_member(self, member_id, display_name, points, roles, joined_at, mutes):
+    async def add_member(self, member_id, display_name, points, roles, joined_at, mutes, last_message_time):
         async with self._lock:
             if member_id not in self._users:
                 self._users[member_id] = {
@@ -31,6 +39,7 @@ class UserHandler(commands.Cog):
                     'roles': [role.name for role in roles[1:]],
                     'joined_at': joined_at.isoformat(),
                     'muted_count': mutes if mutes is not None else 0,
+                    'last_message_time': last_message_time.isoformat() if last_message_time is not None else ''
                 }
             else:
                 if points is not None:
@@ -69,8 +78,6 @@ class UserHandler(commands.Cog):
             print("Error: 'users.json' contains invalid JSON.")
 
 async def setup(bot):
-    bot.user_handler = UserHandler(bot)  # Create a new UserHandler instance and add it as an attribute to the bot
-    await bot.user_handler.load_users()  # Load users from file
     await bot.add_cog(bot.user_handler)  # Add the same UserHandler instance as a cog    {'threshold': 0, 'role_id': 787746412820824074},
 
 
