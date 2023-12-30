@@ -47,9 +47,9 @@ def run(): # Define a function to run the bot
         await bot.user_handler.load_users()  # Load users from file  
         #print(bot.user_handler.get_users()) # Print users to console
         
-        # for cmd_file in settings.CMDS_DIR.glob("*.py"): # Load all commands in the commands folder
-        #     if cmd_file.name != "__init__.py":
-        #         await bot.load_extension(f"commands.{cmd_file.name[:-3]}")
+        for cmd_file in settings.CMDS_DIR.glob("*.py"): # Load all commands in the commands folder
+            if cmd_file.name != "__init__.py":
+                await bot.load_extension(f"commands.{cmd_file.name[:-3]}")
 
         for cog_file in settings.COGS_DIR.glob("*.py"): # Load all cogs in the cogs folder
             if cog_file.name != "__init__.py":

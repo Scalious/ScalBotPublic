@@ -29,11 +29,7 @@ class Greetings(commands.Cog):
         
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        new_nickname = "Your New Nickname"
-        await member.edit(nick=new_nickname)
-        # Get the channel where you want to send the message
         channel = self.bot.get_channel(settings.welcome_ID.id)
-        # Send a message to the channel
         await channel.send(f"Welcome to the server, {member.mention}!")
 
     @commands.command(
