@@ -7,6 +7,8 @@ import cogs.member_function as mf
 
 from cogs.member_function import UserHandler
 
+import asyncio
+
 # Leveling is only possible in the Public Lobby: lounge channel currently
 
 logger = settings.logging.getLogger("bot")
@@ -24,7 +26,7 @@ class LevelingCog(commands.Cog):
         self.role_change_tasks = {}
 
     # Add roles if they pass a new threshold
-    @tasks.loop(seconds=5)  # Run this task every 30 seconds
+    @tasks.loop(seconds=1)  # Run this task every 30 seconds
     async def add_roles(self):
         guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
         await self.user_handler.load_users()
@@ -44,7 +46,7 @@ class LevelingCog(commands.Cog):
                         await member.add_roles(role, reason="Passed a new threshold")
                         await self.user_handler.save_users()
             else:
-                await self.user_handler.add_member(member_id_str, member.display_name, 1, member.roles, member.joined_at)    
+                await self.user_handler.add_member(member_id_str, member.display_name, 0, member.roles, member.joined_at)    
         await self.user_handler.save_users() #  Save users to file
 
     # Remove roles if they exceed the threshold
@@ -68,7 +70,7 @@ class LevelingCog(commands.Cog):
                             await member.remove_roles(member_role, reason="Exceeds current threshold")
 
     # Remove roles if they previously had a higher threshold
-    @tasks.loop(seconds=7)  # Run this task every 7 seconds
+    @tasks.loop(seconds=5)  # Run this task every 7 seconds
     async def remove_roles(self):
         guild = self.bot.get_guild(settings.GUILDS_ID.id)  # Replace with your guild ID
         for member in guild.members:
@@ -98,27 +100,51 @@ class LevelingCog(commands.Cog):
 
             added_roles = after_roles - before_roles
             removed_roles = before_roles - after_roles
+        
+        # Reset points to 0 if Guest role is added - Declining rules
+        if any(role.id == settings.Guest_ID.id for role in added_roles):
+            self.user_handler._users[str(after.id)]['points'] = 0 
+            await self.user_handler.save_users()
 
+        # Updates user roles in users.json
         if added_roles:
-            if after.id in self.role_change_tasks:
+            if after.id in self.role_change_tasks and self.role_change_tasks[after.id].is_running():
                 self.role_change_tasks[after.id].cancel()
-            self.role_change_tasks[after.id] = tasks.loop(seconds=8, count=1)(self.send_role_change_message)
-            self.role_change_tasks[after.id].start(after, added_roles)
 
-        if removed_roles:
             member_id_str = str(after.id)
             current_roles = self.user_handler._users[member_id_str]['roles']
             self.user_handler._users[member_id_str]['roles'] = [role for role in current_roles if role not in [r.name for r in removed_roles]]
             await self.user_handler.save_users()
-                
+
+            await asyncio.sleep(1)
+            self.role_change_tasks[after.id] = self.send_role_change_message
+
+            try:
+                self.role_change_tasks[after.id].start(after, added_roles)
+            except RuntimeError:
+                pass
+
+        if removed_roles:
+            if after.id in self.role_change_tasks and self.role_change_tasks[after.id].is_running():
+                self.role_change_tasks[after.id].cancel()
+            await asyncio.sleep(1)
+            try:
+                self.role_change_tasks[after.id].start(after, removed_roles)
+            except RuntimeError:
+                pass
+    
+    # Send message to channel when a role is added - this shit is finiky af
+    @tasks.loop(seconds=3, count=1)            
     async def send_role_change_message(self, member, added_roles):
-        channel = self.last_channel.get(str(member.id))  # Get the last channel
-        if channel is not None:
-            role_names = ", ".join(role.name for role in added_roles) 
-            await channel.send(f"{member.mention} has been given the role - {role_names}!")
-            member_id_str = str(member.id)
-            self.user_handler._users[member_id_str]['roles'] = [role.name for role in member.roles]
-            await self.user_handler.save_users()
+        await asyncio.sleep(1)
+        if self.send_role_change_message.current_loop == 0:
+            channel = self.last_channel.get(str(member.id))
+            if channel is not None:
+                role_names = ", ".join(role.name for role in added_roles) 
+                await channel.send(f"{member.mention} has been given the role - {role_names}!")
+                member_id_str = str(member.id)
+                self.user_handler._users[member_id_str]['roles'] = [role.name for role in member.roles]
+                await self.user_handler.save_users()
 
     # Points System for Leveling
 
