@@ -46,7 +46,7 @@ class LevelingCog(commands.Cog):
                         await member.add_roles(role, reason="Passed a new threshold")
                         await self.user_handler.save_users()
             else:
-                await self.user_handler.add_member(member_id_str, member.display_name, 0, member.roles, member.joined_at)    
+                await self.user_handler.add_member(member_id_str, member.display_name, 0, member.roles, member.joined_at, 0)    
         await self.user_handler.save_users() #  Save users to file
 
     # Remove roles if they exceed the threshold
@@ -105,6 +105,14 @@ class LevelingCog(commands.Cog):
         if any(role.id == settings.Guest_ID.id for role in added_roles):
             self.user_handler._users[str(after.id)]['points'] = 0 
             await self.user_handler.save_users()
+        # Reset points to 1 if New Member role is added - Accepting rules
+        if any(role.id == settings.New_Member_ID.id for role in added_roles):
+            self.user_handler._users[str(after.id)]['points'] = 1 
+            await self.user_handler.save_users()
+        # Increment muted count if Muted role is added
+        if any(role.id == settings.Muted_ID.id for role in added_roles):
+            self.user_handler._users[str(after.id)]['muted_count'] += 1 
+            await self.user_handler.save_users()
 
         # Updates user roles in users.json
         if added_roles:
@@ -117,7 +125,8 @@ class LevelingCog(commands.Cog):
             await self.user_handler.save_users()
 
             await asyncio.sleep(1)
-            self.role_change_tasks[after.id] = self.send_role_change_message
+            if after.id not in self.role_change_tasks:
+                self.role_change_tasks[after.id] = self.send_role_change_message
 
             try:
                 self.role_change_tasks[after.id].start(after, added_roles)
@@ -154,7 +163,7 @@ class LevelingCog(commands.Cog):
         author_id = str(message.author.id)
         if type(message.channel) is not discord.TextChannel or message.author.bot: return
         self.last_channel[author_id] = message.channel  # ignore DMs and bots
-        if message.channel.id == settings.lounge_test_ID.id or message.channel.id == settings.scalbot_test_ID.id:
+        if message.channel.category_id == settings.Public_Lobby_ID.id or message.channel.id == settings.scalbot_test_ID.id:  
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] += 1
                 await self.user_handler.save_users()
@@ -166,7 +175,7 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        if reaction.message.channel.id == settings.lounge_test_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
+        if reaction.message.channel.category_id == settings.Public_Lobby_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] += 3
                 await self.user_handler.save_users()
@@ -178,7 +187,7 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        if reaction.message.channel.id == settings.lounge_test_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
+        if reaction.message.channel.category_id == settings.Public_Lobby_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] -= 3
                 await self.user_handler.save_users()

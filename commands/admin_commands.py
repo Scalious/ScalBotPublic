@@ -4,6 +4,8 @@ from discord.ui import Button, View
 
 from datetime import timedelta
 
+import asyncio
+
 logger = settings.logging.getLogger("bot")
 
 class Admin(commands.Cog):
@@ -12,9 +14,7 @@ class Admin(commands.Cog):
         self.bot = bot
         self.leveling = self.bot.get_cog("LevelingCog")
         self.user_handler = self.bot.get_cog("UserHandler")
-
-    class NotOwner(commands.CheckFailure):
-        pass
+        self.timeout_tasks = {}
 
     @staticmethod
     def is_owner():
@@ -28,26 +28,28 @@ class Admin(commands.Cog):
         
     # Test Commands
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def print_users(self, ctx):
+        """Prints the users Dictionary"""
         user_handler = self.bot.get_cog("UserHandler")
         users = user_handler.get_users()
         await ctx.send(f'Users: {users}')
  
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def purge_channel(self, ctx):
+        """Purges the channel of 100 messages"""
         channel = ctx.channel
         await channel.purge()
         await ctx.send("Channel purged successfully.")
 
     # Admin Commands
 
-    # Resets the rules channel message
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def rules(self, ctx):
+        """Resets the rules channel message"""
         channel = self.bot.get_channel(settings.rules_ID.id)
         await channel.purge()
         view = View()
@@ -61,32 +63,61 @@ class Admin(commands.Cog):
             view=view
         )
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def self_assign(self, ctx):
+        """Resets the self-assign-roles channel message"""
         channel = self.bot.get_channel(settings.self_assign_roles_ID.id)  # Replace with your channel ID
         await channel.purge()
         await channel.send(
             "```\nWelcome to the self-assign-roles channel!\n\n"
             "Please React to the emotes below to gain access to the corresponding channels.\n\n```",
         )
+    
+    # Admin Admin Commands
+        
+    @commands.command()
+    @is_owner()
+    async def mute(self, ctx, member: discord.Member):
+        """Timeout a user for an hour."""
+        muted_role = discord.utils.get(ctx.guild.roles, id=settings.Muted_ID.id)
+        await member.add_roles(muted_role)
+        self.timeout_tasks[member.id] = self.bot.loop.create_task(self.await_unmute(member, 60))
+
+    async def await_unmute(self, member, minutes):
+        """Remove the "Muted" role from a user after a certain number of minutes."""
+        await asyncio.sleep(minutes * 60)
+        muted_role = discord.utils.get(member.guild.roles, id=settings.Muted_ID.id)
+        await member.remove_roles(muted_role)
+        del self.timeout_tasks[member.id]
+
+    @commands.command()
+    @is_owner()
+    async def unmute(self, ctx, member: discord.Member):
+        """Umutes a user immediately."""
+        muted_role = discord.utils.get(ctx.guild.roles, id=settings.Muted_ID.id)
+        await member.remove_roles(muted_role)
+        del self.timeout_tasks[member.id]
 
     # Loads, unloads, and reloads cogs
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def load(self, ctx, cog:str):
+        """Loads a cog"""
         logger.info(f"Loading {cog}...")
         await self.bot.load_extension(f"cogs.{cog.lower()}") # Load a cog
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def unload(self, ctx, cog:str):
+        """Unloads a cog"""
         logger.info(f"Unloading {cog}...")
         await self.bot.unload_extension(f"cogs.{cog.lower()}") # Unload a cog
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def reload(self, ctx, cog:str):
+        """Reloads a cog"""
         logger.info(f"Reloading {cog}...")
         await self.bot.reload_extension(f"cogs.{cog.lower()}") # Reload a cog
 
