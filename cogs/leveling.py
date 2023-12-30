@@ -158,7 +158,7 @@ class LevelingCog(commands.Cog):
         author_id = str(message.author.id)
         if type(message.channel) is not discord.TextChannel or message.author.bot: return
         self.last_channel[author_id] = message.channel  # ignore DMs and bots
-        if message.channel.id == settings.lounge_test_ID.id or message.channel.id == settings.scalbot_test_ID.id:
+        if message.channel.category_id == settings.Public_Lobby_ID.id or message.channel.category_id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] += 1
                 await self.user_handler.save_users()
@@ -170,7 +170,7 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        if reaction.message.channel.id == settings.lounge_test_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
+        if reaction.message.channel.category_id == settings.Public_Lobby_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] += 3
                 await self.user_handler.save_users()
@@ -182,7 +182,7 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(user.id)
         if type(reaction.message.channel) is not discord.TextChannel or user.bot: return  # ignore DMs and bots
-        if reaction.message.channel.id == settings.lounge_test_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
+        if reaction.message.channel.category_id == settings.Public_Lobby_ID.id or reaction.message.channel.id == settings.scalbot_test_ID.id:
             if author_id in self.user_handler._users:
                 self.user_handler._users[author_id]['points'] -= 3
                 await self.user_handler.save_users()
