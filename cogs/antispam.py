@@ -12,7 +12,7 @@ import settings
 logger = settings.logging.getLogger("bot")
 
 LINK_REGEX = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-MESSAGE_LIMIT = 5 #number of messages before warnings in 15 seconds
+MESSAGE_LIMIT = 7 #number of messages before warnings in 15 seconds
 LINK_LIMIT = 4 #number of links before warmings in 30 seconds
 REACTION_LIMIT = 10 #number of reactions before warnings in 15 seconds    
 VIOLATION_LIMIT = 4 #number of violations before timeout in 60 seconds

@@ -15,6 +15,7 @@ class Admin(commands.Cog):
         self.leveling = self.bot.get_cog("LevelingCog")
         self.user_handler = self.bot.get_cog("UserHandler")
         self.timeout_tasks = {}
+        self.users = self.bot.user_handler
 
     @staticmethod
     def is_owner():
@@ -97,7 +98,9 @@ class Admin(commands.Cog):
         """Umutes a user immediately."""
         muted_role = discord.utils.get(ctx.guild.roles, id=settings.Muted_ID.id)
         await member.remove_roles(muted_role)
-        del self.timeout_tasks[member.id]
+        if member.id in self.timeout_tasks:
+            self.timeout_tasks[member.id].cancel()
+            del self.timeout_tasks[member.id]
 
     # Loads, unloads, and reloads cogs
     @commands.command()
