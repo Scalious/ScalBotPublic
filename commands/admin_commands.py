@@ -4,6 +4,8 @@ from discord.ui import Button, View
 
 from datetime import timedelta
 
+import asyncio
+
 logger = settings.logging.getLogger("bot")
 
 class Admin(commands.Cog):
@@ -12,6 +14,7 @@ class Admin(commands.Cog):
         self.bot = bot
         self.leveling = self.bot.get_cog("LevelingCog")
         self.user_handler = self.bot.get_cog("UserHandler")
+        self.timeout_tasks = {}
 
     @staticmethod
     def is_owner():
@@ -70,6 +73,31 @@ class Admin(commands.Cog):
             "```\nWelcome to the self-assign-roles channel!\n\n"
             "Please React to the emotes below to gain access to the corresponding channels.\n\n```",
         )
+    
+    # Admin Admin Commands
+        
+    @commands.command()
+    @is_owner()
+    async def mute(self, ctx, member: discord.Member):
+        """Timeout a user for an hour."""
+        muted_role = discord.utils.get(ctx.guild.roles, id=settings.Muted_ID.id)
+        await member.add_roles(muted_role)
+        self.timeout_tasks[member.id] = self.bot.loop.create_task(self.await_unmute(member, 60))
+
+    async def await_unmute(self, member, minutes):
+        """Remove the "Muted" role from a user after a certain number of minutes."""
+        await asyncio.sleep(minutes * 60)
+        muted_role = discord.utils.get(member.guild.roles, id=settings.Muted_ID.id)
+        await member.remove_roles(muted_role)
+        del self.timeout_tasks[member.id]
+
+    @commands.command()
+    @is_owner()
+    async def unmute(self, ctx, member: discord.Member):
+        """Umutes a user immediately."""
+        muted_role = discord.utils.get(ctx.guild.roles, id=settings.Muted_ID.id)
+        await member.remove_roles(muted_role)
+        del self.timeout_tasks[member.id]
 
     # Loads, unloads, and reloads cogs
     @commands.command()

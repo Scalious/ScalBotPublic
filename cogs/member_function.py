@@ -21,19 +21,22 @@ class UserHandler(commands.Cog):
     def get_users(self):
         return self._users
 
-    async def add_member(self, member_id, display_name, points, roles, joined_at):
+    async def add_member(self, member_id, display_name, points, roles, joined_at, mutes):
         async with self._lock:
             if member_id not in self._users:
                 self._users[member_id] = {
                     'member_id': member_id,
                     'display_name': display_name,
                     'points': points if points is not None else 0,
-                    'roles': [role.name for role in roles],
+                    'roles': [role.name for role in roles[1:]],
                     'joined_at': joined_at.isoformat(),
+                    'muted_count': mutes if mutes is not None else 0,
                 }
             else:
                 if points is not None:
                     self._users[member_id]['points'] = points
+                if mutes is not None:
+                    self._users[member_id]['muted_count'] = mutes
                 self._users[member_id]['display_name'] = display_name
                 self._users[member_id]['roles'] = [role.name for role in roles]
 

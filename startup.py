@@ -33,8 +33,8 @@ async def on_ready():
         # creates the thresholds.py file
         with open('thresholds.py', 'a') as f:
             non_linear_list = [i**7 for i in range(len(guild.roles))]
-            # change the 5:-2 here, for additional reaction roles to 5 (eg 6,7,8), for addition admin roles add to -2 (eg -3, -4, -5)
-            thresholds = [{'threshold': i, 'role_id': role.id} for i, role in zip(non_linear_list, guild.roles[5:-2])]
+            # change the 5:-2 here, for additional reaction roles to 6 (eg 7,8,9), for addition admin roles add to -2 (eg -3, -4, -5)
+            thresholds = [{'threshold': i, 'role_id': role.id} for i, role in zip(non_linear_list, guild.roles[6:-2])]
             f.write("thresholds = [\n\n")      
             for threshold in thresholds:
                 f.write(f"     {threshold}, # {guild.get_role(threshold['role_id'])}\n")

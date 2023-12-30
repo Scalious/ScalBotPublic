@@ -21,11 +21,11 @@ pip install -r requirements.txt
 You will need;
 1. Update the file .env with you TOKEN and GUILD id's before running startup.py
 2. Within your setup Discord server: 
-    -the bot assumes you have 1 admin role, 1 bot role and 4 reaction roles, to add more you need to modify the startup.py
+    -the bot assumes you have 1 admin role, 1 muted role, 1 bot role and 4 reaction roles, to add more you need to modify the startup.py
     -the Admin and Bot roles are ignored in the leveling.py, if add more roles you will need to include them here
     -Create an Admin role - move this to the top 2 positions
     -A bot role is automatically created - move this to the top 2 positions
-    -Create 4 Reaction roles and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)
+    -Create 4 Reaction roles & Muted and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)
         -their names do not matter but the order is important for the thresholds in startup.py
     -Create a Channel Category called PUBLIC LOBBY
         -this is where users can earn points for additional ranks, points are not generated anywhere else

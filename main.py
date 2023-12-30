@@ -24,7 +24,8 @@ def run(): # Define a function to run the bot
         admin_role = discord.utils.get(message.guild.roles, id=settings.Admin_ID.id)
         overwrites = {
             message.guild.default_role: discord.PermissionOverwrite(read_messages=False), # Deny everyone to see the channel
-            #message.author: discord.PermissionOverwrite(read_messages=True), # Allow the author to see the channel
+            interaction.user: discord.PermissionOverwrite(read_messages=True), # Allow the user to see the channel
+            #message.author: discord.PermissionOverwrite(read_messages=True), # Allow the target message author to see the channel
             bot.user: discord.PermissionOverwrite(read_messages=True), # Allow the bot to see the channel
             admin_role: discord.PermissionOverwrite(read_messages=True) # Allow the admin role to see the channel
         }
@@ -36,7 +37,7 @@ def run(): # Define a function to run the bot
         view.add_item(Button(style=discord.ButtonStyle.primary, label="Transcript", custom_id="transcript"))
         await channel.send(f'Ticket channel created by {nickname}.', view=view)
         await channel.send(f'Target message: {message.content}')
-        await interaction.followup.send('Ticket created.')
+        await interaction.followup.send('Ticket created.')  
   
     @bot.event # Event to run when the bot is ready
     async def on_ready(): # Define a function to run when the bot is ready
