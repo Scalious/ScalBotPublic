@@ -105,6 +105,10 @@ class LevelingCog(commands.Cog):
         if any(role.id == settings.Guest_ID.id for role in added_roles):
             self.user_handler._users[str(after.id)]['points'] = 0 
             await self.user_handler.save_users()
+        
+        if any(role.id == settings.New_Member_ID.id for role in added_roles):
+            self.user_handler._users[str(after.id)]['points'] = 1 
+            await self.user_handler.save_users()
 
         # Updates user roles in users.json
         if added_roles:

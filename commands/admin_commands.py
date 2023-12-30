@@ -13,9 +13,6 @@ class Admin(commands.Cog):
         self.leveling = self.bot.get_cog("LevelingCog")
         self.user_handler = self.bot.get_cog("UserHandler")
 
-    class NotOwner(commands.CheckFailure):
-        pass
-
     @staticmethod
     def is_owner():
         async def predicate(ctx):
@@ -28,26 +25,28 @@ class Admin(commands.Cog):
         
     # Test Commands
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def print_users(self, ctx):
+        """Prints the users Dictionary"""
         user_handler = self.bot.get_cog("UserHandler")
         users = user_handler.get_users()
         await ctx.send(f'Users: {users}')
  
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def purge_channel(self, ctx):
+        """Purges the channel of 100 messages"""
         channel = ctx.channel
         await channel.purge()
         await ctx.send("Channel purged successfully.")
 
     # Admin Commands
 
-    # Resets the rules channel message
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def rules(self, ctx):
+        """Resets the rules channel message"""
         channel = self.bot.get_channel(settings.rules_ID.id)
         await channel.purge()
         view = View()
@@ -61,9 +60,10 @@ class Admin(commands.Cog):
             view=view
         )
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def self_assign(self, ctx):
+        """Resets the self-assign-roles channel message"""
         channel = self.bot.get_channel(settings.self_assign_roles_ID.id)  # Replace with your channel ID
         await channel.purge()
         await channel.send(
@@ -72,21 +72,24 @@ class Admin(commands.Cog):
         )
 
     # Loads, unloads, and reloads cogs
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def load(self, ctx, cog:str):
+        """Loads a cog"""
         logger.info(f"Loading {cog}...")
         await self.bot.load_extension(f"cogs.{cog.lower()}") # Load a cog
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def unload(self, ctx, cog:str):
+        """Unloads a cog"""
         logger.info(f"Unloading {cog}...")
         await self.bot.unload_extension(f"cogs.{cog.lower()}") # Unload a cog
 
-    @commands.command(hidden=True)
+    @commands.command()
     @is_owner()
     async def reload(self, ctx, cog:str):
+        """Reloads a cog"""
         logger.info(f"Reloading {cog}...")
         await self.bot.reload_extension(f"cogs.{cog.lower()}") # Reload a cog
 

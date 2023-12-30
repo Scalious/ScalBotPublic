@@ -1,10 +1,10 @@
-# ScalBot3.0
+======= ScalBot3.0 =======
 
-## Description
+======= Description =======
 
-This is a moderation bot created for managing AntiSpam and Ticketing. It also includes a leveling system.
+This is a moderation bot created for managing AntiSpam, Ticketing, Member Activity Roles, and Self-Assign Roles.
 
-## Installation
+======= Local Installation Requirements =======
 
 To run this project, you need to have the following dependencies installed:
 
@@ -16,6 +16,8 @@ You can install the dependencies by running the following command:
 ```bash
 pip install -r requirements.txt
 
+======= Server / Bot Setup =======
+
 You will need;
 1. Update the file .env with you TOKEN and GUILD id's before running startup.py
 2. Within your setup Discord server: 
@@ -25,17 +27,23 @@ You will need;
     -Bot should be in the top 2 positions
     -Create 4 Reaction roles and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)
     -their names do not matter but the order is important for the thresholds in startup.py
-=======
-You will need to create a file .env with you TOKEN and GUILD id. before running startup.py
+3. You will need to create a file .env with you TOKEN and GUILD id. before running startup.py in the same folder
 
 Run startup.py
 
 Run main.py
 
-## Known Issues
+======= Known Issues =======
 
 On startup Errors:
+# library not used
 WARNING    - discord.client : PyNaCl is not installed, voice will NOT be supported
-Error: 'users.txt' contains invalid JSON. - occurs when users.txt is not created with {} dictionary
+# users.json is not created with {} dictionary
+Error: 'users.json' contains invalid JSON. - 
+# it just does
 Reloading any file with a tasks.loop will cause repeat issues with .reload commands
+# not certain if this error is an issue or how to avoid it
+Removing roles outside of the thresholds list will cause an error
+# no clue - might be a load order or timing issue
+The role update message will show the previous role when adding/removing roles sometimes
 

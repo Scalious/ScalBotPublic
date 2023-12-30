@@ -14,13 +14,6 @@ class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    class RoleButtons(ui.View):
-        def __init__(self, member: Member, accept_role: Role, remove_role: Role):
-            super().__init__()
-            self.member = member
-            self.accept_role = accept_role
-            self.remove_role = remove_role
-
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         # Replace 'your-channel-id' with the ID of your channel
@@ -37,8 +30,9 @@ class Greetings(commands.Cog):
         hidden=False #hides the command description
     )
     async def hello(self, ctx):
+        """Try saying howdy!"""
         author = ctx.author
-        await ctx.send(f"Happy Holidays! {author.mention}")
+        await ctx.send(f"Hello! {author.mention}")
         
     @commands.command(
         aliases=['heyo','sup','yo','howdy','heeey','heey','hey'], #shortcut/shortforms
