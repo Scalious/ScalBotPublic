@@ -12,21 +12,22 @@ async def on_ready():
     if not os.path.exists('thresholds.py'):
         # Open the .env file in append mode
         with open('.env', 'a') as f:
-            f.write("\n\n")
+            f.write("\n")
             # Iterate over all the roles in the guild
             for role in guild.roles:
                 # Write the role's ID and name to the file in the format KEY=VALUE
-                f.write(f"{role.name.upper().replace(' ', '_').replace('.', '_').replace('@', '')}={role.id}\n")
-            
+                f.write(f"{role.name.upper().replace(' ', '_').replace('.', '_').replace('@', '')} = {role.id}\n")
+            f.write("\n")
             for channel in guild.channels:
                 f.write(f"{channel.name.upper().replace(' ', '_').replace('-', '_')}={channel.id}\n")
 
         # Open the .env file in append mode
         with open('settings.py', 'a') as f:
-            f.write("\n\n")
+            f.write("\n")
             # Iterate over all the channels in the guild
             for role in guild.roles:     
                 f.write(f"{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}_ID = discord.Object(id=int(os.getenv('{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}')))\n\n") 
+            f.write("\n")
             for channel in guild.channels:
                 f.write(f"{channel.name.replace(' ', '_').replace('-', '_')}_ID = discord.Object(id=int(os.getenv('{channel.name.replace(' ', '_').replace('-', '_')}')))\n\n")
             

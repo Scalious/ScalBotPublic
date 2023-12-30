@@ -22,9 +22,9 @@ You will need;
 1. Update the file .env with you TOKEN and GUILD id's before running startup.py
 2. Within your setup Discord server: 
     -the bot assumes you have 1 admin role, 1 muted role, 1 bot role and 4 reaction roles, to add more you need to modify the startup.py
-    -the Admin and Bot roles are ignored in the leveling.py, if add more roles you will need to include them here
+    -the Admin and Bot roles are ignored in the leveling.py, if add more admin roles you will need to include them here
     -Create an Admin role - move this to the top 2 positions
-    -A bot role is automatically created - move this to the top 2 positions
+    -A bot role is automatically created - move this to the top 2 positions (I'm probably forgetting something here)
     -Create 4 Reaction roles & Muted and move them to the bottom eg. (NSFW,Events, Misc1, Misc2)
         -their names do not matter but the order is important for the thresholds in startup.py
     -Create a Channel Category called PUBLIC LOBBY
@@ -35,6 +35,8 @@ You will need;
 
 Run startup.py
 
+1. Add the Admin and Bot roles to the ignore_roles_ids within leveling.py
+
 Run main.py
 
 ======= Known Issues =======
@@ -42,12 +44,13 @@ Run main.py
 On startup Errors:
 # library not used
 WARNING    - discord.client : PyNaCl is not installed, voice will NOT be supported
+
 # users.json is not created with {} dictionary
-Error: 'users.json' contains invalid JSON. - 
+Error: 'users.json' contains invalid JSON.
+
 # it just does
 Reloading any file with a tasks.loop will cause repeat issues with .reload commands
-# not certain if this error is an issue or how to avoid it
+
+# not certain if this error is an issue or how to avoid it (i might have fixed this?)
 Removing roles outside of the thresholds list will cause an error
-# no clue - might be a load order or timing issue
-The role update message will show the previous role when adding/removing roles sometimes
 

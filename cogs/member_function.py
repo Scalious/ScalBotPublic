@@ -13,21 +13,24 @@ logger = settings.logging.getLogger("bot")
 class UserHandler(commands.Cog):
     
     def __init__(self, bot):
-        self.bot = bot
-        self._users = {}
-        self._lock = asyncio.Lock()
-        self.bot.loop.create_task(self.load_users())
-        self.bot.loop.create_task(self.save_users_periodically())
+        self.bot = bot # Save the bot instance
+        self._users = {} # Create an empty dictionary to store the users
+        self._lock = asyncio.Lock() #
+        self.bot.loop.create_task(self.load_users()) # Load the users from the file
+        self.bot.loop.create_task(self.save_users_periodically()) # Save the users periodically
         self.update_interval = 5 # Save users every 5 seconds
 
+    # Getters
     def get_users(self):
         return self._users   
     
+    # Setters
     async def save_users_periodically(self):
         while True:
-            await asyncio.sleep(self.update_interval)
-            with open('users.json', 'w') as file:
-                json.dump(self._users, file, indent=4)
+            await asyncio.sleep(self.update_interval)        
+            async with self._lock:
+                with open('users.json', 'w') as file:
+                    json.dump(self._users, file, indent=4)
 
     async def add_member(self, member_id, display_name, points, roles, joined_at, mutes, last_message_time):
         async with self._lock:
