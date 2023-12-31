@@ -134,7 +134,7 @@ class LevelingCog(commands.Cog):
 
             member_id_str = str(after.id)
             current_roles = self.bot.user_handler._users[member_id_str]['roles']
-            self.bot.user_handler._users[member_id_str]['roles'] = [role for role in current_roles if role not in [r.name for r in removed_roles]]
+            self.bot.user_handler._users[member_id_str]['roles'] = [role for role in current_roles if role not in [r.name for r in removed_roles] and role != settings.Muted_ID.id]
             await self.bot.user_handler.save_users()
 
             await asyncio.sleep(1)
@@ -192,11 +192,10 @@ class LevelingCog(commands.Cog):
         await self.add_roles()
         author_id = str(message.author.id)
         if type(message.channel) is not discord.TextChannel or message.author.bot: return
-        self.last_channel[author_id] = message.channel  # ignore DMs and bots
+        self.last_channel[author_id] = message.channel
         if message.channel.category_id == settings.Public_Lobby_ID.id or message.channel.id == settings.scalbot_test_ID.id:  
             if author_id in self.bot.user_handler._users:
                 self.bot.user_handler._users[author_id]['points'] += 1
-                print(self.bot.user_handler._users[author_id]['points'])
                 #await self.user_handler.save_users()
             else:
                 pass

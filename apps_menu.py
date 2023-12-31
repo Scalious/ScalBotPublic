@@ -17,8 +17,6 @@ def setup(bot):
         self.bot = bot
         self.unmute_tasks = {}
 
-    bot.add_check(is_owner)
-
     # Creates the Open a Ticket button
     @bot.tree.context_menu(name = "Open a Ticket", guild = settings.GUILDS_ID)
     @app_commands.checks.cooldown(2, 3600, key = lambda i: (i.guild_id, i.user.id)) # 2 uses per hour per user
