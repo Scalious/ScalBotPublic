@@ -76,6 +76,20 @@ class UserHandler(commands.Cog):
             if points <= role['threshold']:
                 return role['threshold'] 
         return None
+    
+    async def next_threshold_name(self, points): 
+        thresholds.sort(key=lambda x: x['threshold'], reverse=True)
+        for role in thresholds:
+            if points >= role['threshold']:
+                return role['role_name'] 
+        return None    
+        
+    async def role_colour(self, points): 
+        thresholds.sort(key=lambda x: x['threshold'], reverse=True)
+        for role in thresholds:
+            if points >= role['threshold']:
+                return role['role_colour'] 
+        return None
 
     async def save_users(self):
         async with self._lock:

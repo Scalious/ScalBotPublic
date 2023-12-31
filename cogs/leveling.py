@@ -179,7 +179,7 @@ class LevelingCog(commands.Cog):
         if self.send_role_change_message.current_loop == 0:
             channel = self.last_channel.get(str(member.id))
             if channel is not None:
-                role_names = ", ".join(role.name for role in added_roles) 
+                role_names = ", ".join(role.name for role in added_roles if role.name != settings.Muted_ID.id) 
                 await channel.send(f"{member.mention} has been given the role - {role_names}!")
                 member_id_str = str(member.id)
                 self.bot.user_handler._users[member_id_str]['roles'] = [role.name for role in member.roles]
