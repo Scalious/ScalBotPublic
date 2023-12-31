@@ -1,8 +1,6 @@
 import discord, settings
 from discord.ext import commands
 
-# from discord.ui import Button, View
-# from discord import app_commands
 import apps_menu
 
 from cogs.member_function import UserHandler

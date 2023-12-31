@@ -22,7 +22,14 @@ class UserHandler(commands.Cog):
 
     # Getters
     def get_users(self):
-        return self._users   
+        return self._users 
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.type == discord.MessageType.premium_guild_subscription:
+            await self.add_roles()
+            author_id = str(message.author.id)
+            await message.author.add_roles(author_id)
     
     # Setters
     async def save_users_periodically(self):
@@ -61,6 +68,27 @@ class UserHandler(commands.Cog):
         for role in thresholds:
             if points >= role['threshold']:
                 return role['role_id'] 
+        return None
+    
+    async def next_threshold(self, points): 
+        thresholds.sort(key=lambda x: x['threshold'])
+        for role in thresholds:
+            if points <= role['threshold']:
+                return role['threshold'] 
+        return None
+    
+    async def next_threshold_name(self, points): 
+        thresholds.sort(key=lambda x: x['threshold'], reverse=True)
+        for role in thresholds:
+            if points >= role['threshold']:
+                return role['role_name'] 
+        return None    
+        
+    async def role_colour(self, points): 
+        thresholds.sort(key=lambda x: x['threshold'], reverse=True)
+        for role in thresholds:
+            if points >= role['threshold']:
+                return role['role_colour'] 
         return None
 
     async def save_users(self):

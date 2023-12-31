@@ -48,7 +48,10 @@ class Antispam(commands.Cog):
             if member_id_str in users:  
                 mutes = users[member_id_str]['muted_count']  # Get the user's mutes from the dictionary
                 if mutes > 3:
-                    await member.ban(reason="Exceeded mute limit")
+                    try:
+                        await member.ban(reason="Exceeded mute limit")
+                    except commands.MissingPermissions:
+                        continue            
 
     # Timeout spammer & mute - auto mute & unmute after 10 minutes 
     async def timeout_spam(self, message, author, reason):

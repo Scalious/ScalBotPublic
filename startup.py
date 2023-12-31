@@ -12,7 +12,7 @@ async def on_ready():
     if not os.path.exists('thresholds.py'):
         # Open the .env file in append mode
         with open('.env', 'a') as f:
-            f.write("\n")
+            f.write("\n\n")
             # Iterate over all the roles in the guild
             for role in guild.roles:
                 # Write the role's ID and name to the file in the format KEY=VALUE
@@ -23,7 +23,7 @@ async def on_ready():
 
         # Open the .env file in append mode
         with open('settings.py', 'a') as f:
-            f.write("\n")
+            f.write("\n\n")
             # Iterate over all the channels in the guild
             for role in guild.roles:     
                 f.write(f"{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}_ID = discord.Object(id=int(os.getenv('{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}')))\n\n") 
@@ -35,7 +35,7 @@ async def on_ready():
         with open('thresholds.py', 'a') as f:
             non_linear_list = [i**7 for i in range(len(guild.roles))]
             # change the 5:-2 here, for additional reaction roles to 6 (eg 7,8,9), for addition admin roles add to -2 (eg -3, -4, -5)
-            thresholds = [{'threshold': i, 'role_id': role.id} for i, role in zip(non_linear_list, guild.roles[6:-2])]
+            thresholds = [{'threshold': i, 'role_id': role.id, 'role_name': role.name, 'role_colour': role.colour.value} for i, role in zip(non_linear_list, guild.roles[6:-2])]
             f.write("thresholds = [\n\n")      
             for threshold in thresholds:
                 f.write(f"     {threshold}, # {guild.get_role(threshold['role_id'])}\n")
