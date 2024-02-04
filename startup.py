@@ -19,7 +19,7 @@ async def on_ready():
                 f.write(f"{role.name.upper().replace(' ', '_').replace('.', '_').replace('@', '')} = {role.id}\n")
             f.write("\n")
             for channel in guild.channels:
-                f.write(f"{channel.name.upper().replace(' ', '_').replace('-', '_')}={channel.id}\n")
+                f.write(f"{channel.name.upper().replace(' ', '_').replace('-', '_')}_Channel = {channel.id}\n")
 
         # Open the .env file in append mode
         with open('settings.py', 'a') as f:
@@ -29,7 +29,7 @@ async def on_ready():
                 f.write(f"{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}_ID = discord.Object(id=int(os.getenv('{role.name.replace(' ', '_').replace('.', '_').replace('@', '')}')))\n\n") 
             f.write("\n")
             for channel in guild.channels:
-                f.write(f"{channel.name.replace(' ', '_').replace('-', '_')}_ID = discord.Object(id=int(os.getenv('{channel.name.replace(' ', '_').replace('-', '_')}')))\n\n")
+                f.write(f"{channel.name.replace(' ', '_').replace('-', '_')}_ID = discord.Object(id=int(os.getenv('{channel.name.replace(' ', '_').replace('-', '_')}_Channel')))\n\n")
             
         # creates the thresholds.py file
         with open('thresholds.py', 'a') as f:

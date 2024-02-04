@@ -72,7 +72,8 @@ class Admin(commands.Cog):
         await channel.purge()
         await channel.send(
             "```\nWelcome to the self-assign-roles channel!\n\n"
-            "Please React to the emotes below to gain access to the corresponding channels.\n\n```",
+            "Please React to the emotes below to gain access to the corresponding channels.\n\n"
+            "🔞 - NSFW | 🎉 - Events | 👋 - Wave | 🐸 - Frog\n```",
         )
     
     # Admin Admin Commands

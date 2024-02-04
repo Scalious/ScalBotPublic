@@ -23,7 +23,9 @@ class Greetings(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         channel = self.bot.get_channel(settings.welcome_ID.id)
-        await channel.send(f"Welcome to the server, {member.mention}!")
+        await channel.send(f"Welcome to the server, {member.mention}!\n\n"
+                           "Please read the rules in #rules and assign yourself a role in #self-assign-roles.\n",
+                           )
 
     @commands.command(
         enabled=True, #enableds/disables the command

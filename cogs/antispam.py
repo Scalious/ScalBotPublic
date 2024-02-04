@@ -12,11 +12,11 @@ import settings
 logger = settings.logging.getLogger("bot")
 
 LINK_REGEX = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-MESSAGE_LIMIT = 7 #number of messages before warnings in 15 seconds
-LINK_LIMIT = 4 #number of links before warmings in 30 seconds
-REACTION_LIMIT = 10 #number of reactions before warnings in 15 seconds    
-VIOLATION_LIMIT = 4 #number of violations before timeout in 60 seconds
-TIMEOUT_DURATION = 10 #minutes 
+MESSAGE_LIMIT = 7 #number of messages before warnings, within 15 seconds
+LINK_LIMIT = 4 #number of links before warmings, within 30 seconds
+REACTION_LIMIT = 10 #number of reactions before warnings, within 15 seconds    
+VIOLATION_LIMIT = 3 #number of violations before timeout, within 60 seconds
+TIMEOUT_DURATION = 1440 #minutes 
 DELETE_AFTER = 5 #seconds
 
 class Antispam(commands.Cog):
@@ -47,7 +47,7 @@ class Antispam(commands.Cog):
             member_id_str = str(member.id)
             if member_id_str in users:  
                 mutes = users[member_id_str]['muted_count']  # Get the user's mutes from the dictionary
-                if mutes > 3:
+                if mutes > 3:  # If the user has more than 3 mutes
                     try:
                         await member.ban(reason="Exceeded mute limit")
                     except commands.MissingPermissions:
