@@ -39,8 +39,14 @@ class UserCard(commands.Cog):
         background.polygon(card_right_shape, color=(colour))  
 
         # Profile Picture
-        profile_picture = await load_image_async(str(member.avatar.url))
-        profile = Editor(profile_picture).resize((100, 100)).circle_image()  
+        if member.avatar:
+            profile_picture = await load_image_async(str(member.avatar.url))
+            profile = Editor(profile_picture).resize((100, 100)).circle_image()
+        else:
+            # Use default profile picture or placeholder
+            # For example, you could load a default image from disk
+            profile_picture = await load_image_async("default_profile_picture.png")
+            profile = Editor(profile_picture).resize((100, 100)).circle_image()  
         large_background_circle = Editor(Canvas((220, 220), color=(colour))).circle_image() 
         background_circle = large_background_circle.resize((110, 110)) 
         background_circle.paste(profile, (5, 5)) 

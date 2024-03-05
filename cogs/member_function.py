@@ -39,6 +39,20 @@ class UserHandler(commands.Cog):
                 with open('users.json', 'w') as file:
                     json.dump(self._users, file, indent=4)
 
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        # Assuming you have access to the necessary information to call add_member
+        display_name = member.display_name
+        points = 0
+        roles = member.roles  # This returns a list of Role objects
+        joined_at = member.joined_at
+        mutes = 0
+        last_message_time = None  # You might need to fetch this information from elsewhere
+
+        # Call the add_member function with the member's information
+        await self.add_member(member.id, display_name, points, roles, joined_at, mutes, last_message_time)
+
+
     async def add_member(self, member_id, display_name, points, roles, joined_at, mutes, last_message_time):
         async with self._lock:
             if member_id not in self._users:

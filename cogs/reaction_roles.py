@@ -22,7 +22,7 @@ class ReactionRoles(commands.Cog):
             guild = self.bot.get_guild(payload.guild_id)
             emojis_roles = {
                 '🔞': settings.NSFW_ID.id,
-                '🎉': settings.Events_ID.id,
+                '🎉': settings.Event_ID.id,
                 '👋': settings.Wave_ID.id,
                 '🐸': settings.Frog_ID.id,
             }
@@ -45,7 +45,7 @@ class ReactionRoles(commands.Cog):
             guild = self.bot.get_guild(payload.guild_id)
             emojis_roles = {
                 '🔞': settings.NSFW_ID.id,
-                '🎉': settings.Events_ID.id,
+                '🎉': settings.Event_ID.id,
                 '👋': settings.Wave_ID.id,
                 '🐸': settings.Frog_ID.id,
             }
@@ -55,6 +55,7 @@ class ReactionRoles(commands.Cog):
                 role = discord.utils.get(guild.roles, id=role_id)
                 member = discord.utils.get(guild.members, id=payload.user_id)
                 await member.remove_roles(role)
+                
 
 
 async def setup(bot):
